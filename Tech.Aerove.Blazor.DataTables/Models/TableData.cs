@@ -7,17 +7,44 @@
         internal int RecordsFiltered { get; set; } = 0;
         internal int Start { get; set; } = 0;
         internal int Length { get; set; } = 10;
-
+        internal int TotalPages => (RecordsFiltered / Length + (RecordsFiltered % Length > 0 ? 1 : 0));
         internal List<Func<IQueryable, IQueryable>> SearchCommands = new List<Func<IQueryable, IQueryable>>();
         internal List<Func<IQueryable, IQueryable>> OrderCommands = new List<Func<IQueryable, IQueryable>>();
 
         internal Func<Task>? UpdateAsync;
 
-
-        internal void SetPage(int page)
+        internal Task SetPageAsync(int page)
         {
             Page = page;
             Start = (Page - 1) * Length;
+            if (UpdateAsync != null)
+            {
+                return UpdateAsync();
+            }
+            return Task.CompletedTask;
+        }
+
+        internal Task SetPageNextAsync() => SetPageAsync(Page + 1);
+
+        internal Task SetPagePreviousAsync() => SetPageAsync(Page - 1);
+
+        internal Task SetPageFirstAsync() => SetPageAsync(1);
+
+        internal Task SetPageLastAsync() => SetPageAsync(TotalPages);
+
+        internal string GetResultdescriptor()
+        {
+            var to = Start + Length;
+            if (RecordsFiltered < to)
+            {
+                to = RecordsFiltered;
+            }
+            var descriptor = $"Showing {Start + 1} to {to} of {RecordsFiltered} entries";
+            if (RecordsFiltered != RecordsTotal)
+            {
+                descriptor += $"(filtered from {RecordsTotal} total entries)";
+            }
+            return descriptor;
         }
     }
 }
