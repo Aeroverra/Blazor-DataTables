@@ -1,0 +1,47 @@
+﻿@typeparam TItem
+@using System.Diagnostics.CodeAnalysis
+
+<div class="datatable">
+    <table @attributes="InputAttributes">
+        <thead>
+            <tr>
+                @if (TableHead is not null)
+                {
+                    @foreach (var col in Columns)
+                    {
+                        var param = new TableHeadColumn<TItem>(Items, col);
+
+                        <CascadingValue Value="param.Name">
+                            @TableHead(param)
+                        </CascadingValue>
+
+                    }
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Items)
+            {
+                if (TableBody is not null)
+                {
+                    <tr>
+                        @foreach (var col in Columns)
+                        {
+                            var param = new TableRowColumn<TItem>(Items, item, col);
+
+                            @* this will be passed to ColumnName in the Column Component*@
+                            <CascadingValue Value="param.Name">
+                                @TableBody(param)
+                            </CascadingValue>
+
+                        }
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-sm-12 col-md-5"><div class="dataTables_info" id="basic-datatable_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div></div>
+        <div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="basic-datatable_paginate"><ul class="pagination pagination-rounded"><li class="paginate_button page-item previous disabled" id="basic-datatable_previous"><a href="#" aria-controls="basic-datatable" data-dt-idx="0" tabindex="0" class="page-link"><i class="uil uil-angle-left"></i></a></li><li class="paginate_button page-item active"><a href="#" aria-controls="basic-datatable" data-dt-idx="1" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item "><a href="#" aria-controls="basic-datatable" data-dt-idx="2" tabindex="0" class="page-link">2</a></li><li class="paginate_button page-item "><a href="#" aria-controls="basic-datatable" data-dt-idx="3" tabindex="0" class="page-link">3</a></li><li class="paginate_button page-item "><a href="#" aria-controls="basic-datatable" data-dt-idx="4" tabindex="0" class="page-link">4</a></li><li class="paginate_button page-item "><a href="#" aria-controls="basic-datatable" data-dt-idx="5" tabindex="0" class="page-link">5</a></li><li class="paginate_button page-item "><a href="#" aria-controls="basic-datatable" data-dt-idx="6" tabindex="0" class="page-link">6</a></li><li class="paginate_button page-item next" id="basic-datatable_next"><a href="#" aria-controls="basic-datatable" data-dt-idx="7" tabindex="0" class="page-link"><i class="uil uil-angle-right"></i></a></li></ul></div></div>
+    </div>
+</div>
