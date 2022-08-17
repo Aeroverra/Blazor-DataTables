@@ -1,4 +1,6 @@
-﻿@if (Name == ColumnName || Name == null)
+﻿@if (Render)
 {
-    <th @attributes="InputAttributes">@ChildContent</th>
+    <th class="orderable @Direction.GetClass()" @attributes="InputAttributes" @onclick="ChangeDirectionAsync">
+        @ChildContent
+    </th>
 }

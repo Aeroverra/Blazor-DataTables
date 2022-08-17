@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.DynamicLinq;
 using System.Linq.Dynamic.Core;
 using Tech.Aerove.Blazor.DataTables.Models;
 using Tech.Aerove.Blazor.DataTables.Attributes;
+using Tech.Aerove.Blazor.DataTables.Extensions;
 
 namespace Tech.Aerove.Blazor.DataTables.Components
 {
@@ -47,10 +48,8 @@ namespace Tech.Aerove.Blazor.DataTables.Components
                 query = searchCommand(query);
             }
             TableData.RecordsFiltered = await query.CountAsync();
-            foreach (var searchCommand in TableData.OrderCommands)
-            {
-                query = searchCommand(query);
-            }
+
+            query = TableData.Orderables.OrderQuery(query);
 
             query = query.Skip((TableData.Page - 1) * TableData.Length);
 

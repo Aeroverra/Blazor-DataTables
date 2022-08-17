@@ -1,5 +1,5 @@
-﻿table{
-    margin-bottom:15px;
+﻿table {
+    margin-bottom: 15px;
 }
 
 .page-button {
@@ -12,31 +12,35 @@
     position: relative;
     display: block;
     color: #343a40;
-/*    background-color: #fff;*/
+    /*    background-color: #fff;*/
     border: 1px solid transparent;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
-.page-button:hover {
-    z-index: 2;
-    color: #343a40;
-    background-color: #f6f6f7;
-    border-color: #e2e7f1;
-}
+    .page-button:hover {
+        z-index: 2;
+        color: #343a40;
+        background-color: #f6f6f7;
+        border-color: #e2e7f1;
+    }
+
 .page-li:not(:first-child) .page-button {
     margin-left: -1px;
 }
+
 .page-li.active .page-button {
     z-index: 3;
-/*    color: #fff;*/
-/*    background-color: #5369f8;*/
-/*    border-color: #5369f8;*/
+    /*    color: #fff;*/
+    /*    background-color: #5369f8;*/
+    /*    border-color: #5369f8;*/
 }
+
 .page-li.disabled {
     pointer-events: none;
     background-color: none;
     border-color: none;
 }
+
 .page-list {
     list-style: none;
     display: flex;
@@ -45,6 +49,10 @@
     white-space: nowrap;
     justify-content: flex-end;
 }
+
 .result-descriptor {
     padding-top: 0.85em;
+    font-weight: 600;
+    font-family: "IBM Plex Sans",sans-serif;
 }
+

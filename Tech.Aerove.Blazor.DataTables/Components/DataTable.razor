@@ -10,9 +10,10 @@
                     @foreach (var col in Columns)
                     {
                         var param = new TableHeadColumn<TItem>(Items, col);
-
-                        <CascadingValue Value="param.Name">
-                            @TableHead(param)
+                        <CascadingValue Value="TableData">
+                            <CascadingValue Value="param.Name">
+                                @TableHead(param)
+                            </CascadingValue>
                         </CascadingValue>
 
                     }
@@ -59,7 +60,7 @@
                     </a>
                 </li>
                 <li class="page-li active">
-                    <a href="" class="page-button">@TableData.Page</a>
+                    <a href="" class="page-button" @onclick:preventDefault>@TableData.Page</a>
                 </li>
                 <li class="page-li right @(TableData.Page==TableData.TotalPages?"disabled":"")">
                     <a href="" class="page-button" @onclick="TableData.SetPageNextAsync" @onclick:preventDefault>
