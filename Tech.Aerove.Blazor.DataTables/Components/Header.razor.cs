@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Tech.Aerove.Blazor.DataTables.Models;
 
 namespace Tech.Aerove.Blazor.DataTables.Components
@@ -42,22 +43,32 @@ namespace Tech.Aerove.Blazor.DataTables.Components
             Direction = OrderableDirection.None;
         }
 
-        private async Task ChangeDirectionAsync()
+        private async Task ChangeDirectionAsync(MouseEventArgs args)
         {
             var currentDirection = Direction;
-            TableData.ResetOrder();
-           
+
+            if (args.ShiftKey == false)
+            {
+                TableData.ResetOrder();
+            }
+
+
             switch (currentDirection)
             {
                 case OrderableDirection.None: Direction = OrderableDirection.Ascending; break;
                 case OrderableDirection.Ascending: Direction = OrderableDirection.Descending; break;
                 case OrderableDirection.Descending: Direction = OrderableDirection.None; break;
             }
-            if(TableData.Orderables.Any(x=>x.PropertyName == ColumnName))
+
+            if(Direction != OrderableDirection.None)
             {
-                TableData.Orderables.RemoveAll(x => x.PropertyName == ColumnName);
+                if (TableData.Orderables.Any(x => x.PropertyName == ColumnName))
+                {
+                    TableData.Orderables.RemoveAll(x => x.PropertyName == ColumnName);
+                }
+                TableData.Orderables.Add(new OrderCommand(ColumnName, Direction));
             }
-            TableData.Orderables.Add(new OrderCommand(ColumnName,Direction));
+
             await TableData?.UpdateAsync();
         }
 
