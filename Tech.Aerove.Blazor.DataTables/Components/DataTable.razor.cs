@@ -17,6 +17,9 @@ namespace Tech.Aerove.Blazor.DataTables.Components
         #region params
 
         //Render Templates
+        [Parameter] public RenderFragment<TableSource<TItem>>? TableTop { get; set; }
+        [Parameter] public RenderFragment<TableSource<TItem>>? TableTopLeft { get; set; }
+        [Parameter] public RenderFragment<TableSource<TItem>>? TableTopRight { get; set; }
         [Parameter] public RenderFragment<TemplateTableHeadModel<TItem>>? TableHead { get; set; }
         [Parameter] public RenderFragment<TemplateTableBodyModel<TItem>>? TableBody { get; set; }
 

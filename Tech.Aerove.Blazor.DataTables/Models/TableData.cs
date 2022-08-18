@@ -27,7 +27,7 @@
 
         #region search
         private readonly Timer SearchTimer;
-       
+
         public void Search(string text)
         {
             SearchInput = text;
