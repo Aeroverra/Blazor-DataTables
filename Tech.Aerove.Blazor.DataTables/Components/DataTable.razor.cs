@@ -35,12 +35,6 @@ namespace Tech.Aerove.Blazor.DataTables.Components
 
         internal List<ColumnInfoModel> Columns = new List<ColumnInfoModel>();
 
-        private readonly Timer SearchTimer;
-        public DataTable()
-        {
-            SearchTimer = new Timer(Search);
-        }
-
         protected override async Task OnInitializedAsync()
         {
             Columns = ColumnInfoModel.GetColumns<TItem>(TableData);
@@ -53,75 +47,86 @@ namespace Tech.Aerove.Blazor.DataTables.Components
 
         }
 
+        private SemaphoreSlim QueryLock = new SemaphoreSlim(1);
         private async Task QueryDataAsync()
         {
             if (DataSource == null) { return; }
-
-            var query = DataSource.GetQuery();
-
-            TableData.RecordsTotal = await query.CountAsync();
-
-            //WARNING: This uses params to prevent SQL Injection!
-            if (Columns.Searchable() && !string.IsNullOrWhiteSpace(TableData.SearchInput))
+            await QueryLock.WaitAsync();
+            try
             {
-                List<string> searchStrings = new List<string>();
-                List<object> searchParams = new List<object>() { TableData.SearchInput };
-                foreach (var column in Columns.Where(x => x.SearchMode != Models.Enums.SearchMode.None))
+
+                var query = DataSource.GetQuery();
+
+                TableData.RecordsTotal = await query.CountAsync();
+
+                //WARNING: This uses params to prevent SQL Injection!
+                if (Columns.Searchable() && !string.IsNullOrWhiteSpace(TableData.SearchInput))
                 {
-                    if (column.Type.IsEnum)
+                    List<string> searchStrings = new List<string>();
+                    List<object> searchParams = new List<object>() { TableData.SearchInput };
+                    foreach (var column in Columns.Where(x => x.SearchMode != Models.Enums.SearchMode.None))
                     {
-                        var enumNames = column.Type.GetEnumNames();
-                        var enumResults = new List<int>();
-                        if (column.SearchMode == Models.Enums.SearchMode.Exact)
+                        if (column.Type.IsEnum)
                         {
-                            enumResults = enumNames
-                               .Where(x => x.ToLower() == TableData.SearchInput.ToLower())
-                               .Select(x => (int)Enum.Parse(column.Type, x))
-                               .ToList();
+                            var enumNames = column.Type.GetEnumNames();
+                            var enumResults = new List<int>();
+                            if (column.SearchMode == Models.Enums.SearchMode.Exact)
+                            {
+                                enumResults = enumNames
+                                   .Where(x => x.ToLower() == TableData.SearchInput.ToLower())
+                                   .Select(x => (int)Enum.Parse(column.Type, x))
+                                   .ToList();
+                            }
+                            else
+                            {
+                                enumResults = enumNames
+                                    .Where(x => x.ToLower().Contains(TableData.SearchInput.ToLower()))
+                                    .Select(x => (int)Enum.Parse(column.Type, x))
+                                    .ToList();
+                            }
+
+                            foreach (var enumResult in enumResults)
+                            {
+                                searchStrings.Add($"{column.Name} == {enumResult}");
+                            }
                         }
                         else
                         {
-                            enumResults = enumNames
-                                .Where(x => x.ToLower().Contains(TableData.SearchInput.ToLower()))
-                                .Select(x => (int)Enum.Parse(column.Type, x))
-                                .ToList();
+                            var param = "@0";
+                            if (column.SearchMode == Models.Enums.SearchMode.Exact)
+                            {
+                                searchStrings.Add($"{column.Name} == {param}");
+                            }
+                            else
+                            {
+                                searchStrings.Add($"{column.Name}.Contains({param})");
+                            }
                         }
 
-                        foreach (var enumResult in enumResults)
-                        {
-                            searchStrings.Add($"{column.Name} == {enumResult}");
-                        }
                     }
-                    else
-                    {
-                        var param = "@0";
-                        if (column.SearchMode == Models.Enums.SearchMode.Exact)
-                        {
-                            searchStrings.Add($"{column.Name} == {param}");
-                        }
-                        else
-                        {
-                            searchStrings.Add($"{column.Name}.Contains({param})");
-                        }
-                    }
-
+                    query = query.Where(string.Join(" || ", searchStrings), searchParams.ToArray());
                 }
-                query = query.Where(string.Join(" || ", searchStrings), searchParams.ToArray());
+                TableData.RecordsFiltered = await query.CountAsync();
+
+                query = TableData.OrderableCommands.OrderQuery(query);
+
+                query = query.Skip((TableData.Page - 1) * TableData.Length);
+
+                query = query.Take(TableData.Length);
+
+                var result = await DataSource.FinishQueryAsync(query);
+
+                Items.Clear();
+                Items.AddRange(result);
+                await InvokeAsync(() => StateHasChanged());
+                QueryLock.Release();
             }
-            TableData.RecordsFiltered = await query.CountAsync();
-
-            query = TableData.OrderableCommands.OrderQuery(query);
-
-            query = query.Skip((TableData.Page - 1) * TableData.Length);
-
-            query = query.Take(TableData.Length);
-
-            var result = await DataSource.FinishQueryAsync(query);
-            Items.Clear();
-            Items.AddRange(result);
-            StateHasChanged();
+            catch (Exception e)
+            {
+                QueryLock.Release();
+                throw new Exception("Failed to Query", e);
+            }
         }
-
 
         private async Task OnLengthChangeAsync(ChangeEventArgs args)
         {
@@ -136,20 +141,10 @@ namespace Tech.Aerove.Blazor.DataTables.Components
             await TableData.UpdateAsync();
         }
 
-        #region search
-
-
         private void OnSearchChange(ChangeEventArgs args)
         {
-            TableData.SearchInput = $"{args.Value}"; ;
-            SearchTimer.Change(400, Timeout.Infinite);
-
+            TableData.Search($"{args.Value}");
         }
-        private async void Search(object? state)
-        {
-            await InvokeAsync(QueryDataAsync);
-        }
-        #endregion
 
         public void Dispose()
         {

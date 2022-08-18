@@ -14,11 +14,34 @@
         internal event EventHandler? OnOrderReset;
         internal Func<Task>? UpdateAsync;
 
+        internal TableData()
+        {
+            SearchTimer = new Timer(Search);
+        }
+
         internal void ResetOrder()
         {
             OrderableCommands.Clear();
             OnOrderReset?.Invoke(this, EventArgs.Empty);
         }
+
+        #region search
+        private readonly Timer SearchTimer;
+       
+        public void Search(string text)
+        {
+            SearchInput = text;
+            SearchTimer.Change(400, Timeout.Infinite);
+        }
+
+        private async void Search(object? state)
+        {
+            if (UpdateAsync != null)
+            {
+                await UpdateAsync();
+            }
+        }
+        #endregion
 
         internal Task SetLengthAsync(int length)
         {

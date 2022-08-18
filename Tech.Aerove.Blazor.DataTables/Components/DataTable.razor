@@ -11,7 +11,7 @@
                         <select name="basic-datatable_length" class="form-control form-control-sm form-select form-select-sm" @onchange="OnLengthChangeAsync">
                             @foreach (var length in DataLengthAttribute.GetLengths<TItem>())
                             {
-                                <option value="@length">@length</option>
+                                <option value="@length" selected="@(TableData.Length == length)">@length</option>
                             }
                         </select>
                     </label>
