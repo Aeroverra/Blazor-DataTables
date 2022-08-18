@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Tech.Aerove.Blazor.DataTables.Models
 {
+
+    /// <summary>
+    /// Used to generate a orderedqueryable when querying the data source
+    /// </summary>
     internal class OrderCommand
     {
         public string PropertyName { get; set; }

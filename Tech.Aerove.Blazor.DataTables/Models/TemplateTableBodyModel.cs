@@ -2,14 +2,18 @@
 
 namespace Tech.Aerove.Blazor.DataTables.Models
 {
-    public class TableRowColumn<TItem>
+    /// <summary>
+    /// The model passed when making a Column template
+    /// </summary>
+    /// <typeparam name="TItem"></typeparam>
+    public class TemplateTableBodyModel<TItem>
     {
         public string Name { get; set; }
         public object? Value { get; set; }
         public TItem Item { get; set; }
         public List<TItem> Items { get; set; }
 
-        public TableRowColumn(List<TItem> items, TItem item, PropertyInfo propertyInfo)
+        public TemplateTableBodyModel(List<TItem> items, TItem item, PropertyInfo propertyInfo)
         {
             Items = items.ToList();
             Item = item;

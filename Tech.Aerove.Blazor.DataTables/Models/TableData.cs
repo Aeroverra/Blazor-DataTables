@@ -8,18 +8,27 @@
         internal int Start { get; set; } = 0;
         internal int Length { get; set; } = 10;
         internal int TotalPages => (RecordsFiltered / Length + (RecordsFiltered % Length > 0 ? 1 : 0));
-        internal List<Func<IQueryable, IQueryable>> SearchCommands = new List<Func<IQueryable, IQueryable>>();
-        internal List<OrderCommand> Orderables = new List<OrderCommand>();
+        internal string SearchInput { get; set; } = "";
+        internal List<OrderCommand> OrderableCommands = new List<OrderCommand>();
 
         internal event EventHandler? OnOrderReset;
         internal Func<Task>? UpdateAsync;
 
         internal void ResetOrder()
         {
-            Orderables.Clear();
+            OrderableCommands.Clear();
             OnOrderReset?.Invoke(this, EventArgs.Empty);
         }
 
+        internal Task SetLengthAsync(int length)
+        {
+            Length = length;
+            if (UpdateAsync != null)
+            {
+                return UpdateAsync();
+            }
+            return Task.CompletedTask;
+        }
 
         internal Task SetPageAsync(int page)
         {

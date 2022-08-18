@@ -55,4 +55,17 @@
     font-weight: 600;
     font-family: "IBM Plex Sans",sans-serif;
 }
+label {
+    font-weight: normal;
+    white-space: nowrap;
+    text-align: left;
+}
+input {
+    margin-left: 0.5em;
+    display: inline-block;
+    width: auto;
+}
 
+div {
+    font-family: "IBM Plex Sans",sans-serif;
+}

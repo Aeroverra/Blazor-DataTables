@@ -1,6 +1,6 @@
 ﻿namespace Tech.Aerove.Blazor.DataTables.Models
 {
-    public abstract class TableSource<TItem> :  IDisposable
+    public abstract class TableSource<TItem> : IDisposable
     {
         public abstract IQueryable GetQuery();
 
@@ -22,6 +22,6 @@
             return TableData.UpdateAsync();
         }
 
-   
+
     }
 }

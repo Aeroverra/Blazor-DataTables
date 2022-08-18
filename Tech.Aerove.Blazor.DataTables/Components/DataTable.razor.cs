@@ -6,27 +6,44 @@ using System.Linq.Dynamic.Core;
 using Tech.Aerove.Blazor.DataTables.Models;
 using Tech.Aerove.Blazor.DataTables.Attributes;
 using Tech.Aerove.Blazor.DataTables.Extensions;
+using System.Threading.Tasks;
+using System.Data.Common;
+using System.Numerics;
 
 namespace Tech.Aerove.Blazor.DataTables.Components
 {
     public partial class DataTable<TItem> : IDisposable
     {
-        [Parameter] public RenderFragment<TableHeadColumn<TItem>>? TableHead { get; set; }
-        [Parameter] public RenderFragment<TableRowColumn<TItem>>? TableBody { get; set; }
+        #region params
+
+        //Render Templates
+        [Parameter] public RenderFragment<TemplateTableHeadModel<TItem>>? TableHead { get; set; }
+        [Parameter] public RenderFragment<TemplateTableBodyModel<TItem>>? TableBody { get; set; }
+
+
         [Parameter, AllowNull] public List<TItem> Items { get; set; } = new List<TItem>();
         [Parameter, AllowNull] public TableSource<TItem>? DataSource { get; set; }
 
+        /// <summary>
+        /// Table attributes that will be pasted to the html table element
+        /// </summary>
         [Parameter(CaptureUnmatchedValues = true)]
         public Dictionary<string, object>? InputAttributes { get; set; }
+        #endregion
 
         internal TableData TableData = new TableData();
 
-        public List<PropertyInfo> Columns = new List<PropertyInfo>();
+        internal List<ColumnInfoModel> Columns = new List<ColumnInfoModel>();
 
+        private readonly Timer SearchTimer;
+        public DataTable()
+        {
+            SearchTimer = new Timer(Search);
+        }
 
         protected override async Task OnInitializedAsync()
         {
-            SetColumns();
+            Columns = ColumnInfoModel.GetColumns<TItem>(TableData);
             if (DataSource != null)
             {
                 TableData.UpdateAsync = QueryDataAsync;
@@ -43,13 +60,57 @@ namespace Tech.Aerove.Blazor.DataTables.Components
             var query = DataSource.GetQuery();
 
             TableData.RecordsTotal = await query.CountAsync();
-            foreach (var searchCommand in TableData.SearchCommands)
+
+            //WARNING: This uses params to prevent SQL Injection!
+            if (Columns.Searchable() && !string.IsNullOrWhiteSpace(TableData.SearchInput))
             {
-                query = searchCommand(query);
+                List<string> searchStrings = new List<string>();
+                List<object> searchParams = new List<object>() { TableData.SearchInput };
+                foreach (var column in Columns.Where(x => x.SearchMode != Models.Enums.SearchMode.None))
+                {
+                    if (column.Type.IsEnum)
+                    {
+                        var enumNames = column.Type.GetEnumNames();
+                        var enumResults = new List<int>();
+                        if (column.SearchMode == Models.Enums.SearchMode.Exact)
+                        {
+                            enumResults = enumNames
+                               .Where(x => x.ToLower() == TableData.SearchInput.ToLower())
+                               .Select(x => (int)Enum.Parse(column.Type, x))
+                               .ToList();
+                        }
+                        else
+                        {
+                            enumResults = enumNames
+                                .Where(x => x.ToLower().Contains(TableData.SearchInput.ToLower()))
+                                .Select(x => (int)Enum.Parse(column.Type, x))
+                                .ToList();
+                        }
+
+                        foreach (var enumResult in enumResults)
+                        {
+                            searchStrings.Add($"{column.Name} == {enumResult}");
+                        }
+                    }
+                    else
+                    {
+                        var param = "@0";
+                        if (column.SearchMode == Models.Enums.SearchMode.Exact)
+                        {
+                            searchStrings.Add($"{column.Name} == {param}");
+                        }
+                        else
+                        {
+                            searchStrings.Add($"{column.Name}.Contains({param})");
+                        }
+                    }
+
+                }
+                query = query.Where(string.Join(" || ", searchStrings), searchParams.ToArray());
             }
             TableData.RecordsFiltered = await query.CountAsync();
 
-            query = TableData.Orderables.OrderQuery(query);
+            query = TableData.OrderableCommands.OrderQuery(query);
 
             query = query.Skip((TableData.Page - 1) * TableData.Length);
 
@@ -61,32 +122,34 @@ namespace Tech.Aerove.Blazor.DataTables.Components
             StateHasChanged();
         }
 
-        private void SetColumns()
+
+        private async Task OnLengthChangeAsync(ChangeEventArgs args)
         {
-
-            var defaultRender = true;
-            var type = typeof(TItem);
-            var dataTable = type.GetCustomAttribute<DataTableAttribute>();
-            if (dataTable != null)
+            var value = int.Parse($"{args.Value}");
+            var lengths = DataLengthAttribute.GetLengths<TItem>();
+            //Make sure the user isn't manipulating the values
+            if (!lengths.Contains(value))
             {
-                defaultRender = dataTable.DefaultRender;
+                return;
             }
-            List<PropertyInfo> columns = type.GetProperties().ToList();
-
-            foreach (var column in columns)
-            {
-                var render = defaultRender;
-                var columnAttribute = column.GetCustomAttribute<DataColumnAttribute>();
-                if (columnAttribute != null && columnAttribute.Render != null)
-                {
-                    render = columnAttribute.Render.Value;
-                }
-                if (render)
-                {
-                    Columns.Add(column);
-                }
-            }
+            TableData.Length = value;
+            await TableData.UpdateAsync();
         }
+
+        #region search
+
+
+        private void OnSearchChange(ChangeEventArgs args)
+        {
+            TableData.SearchInput = $"{args.Value}"; ;
+            SearchTimer.Change(400, Timeout.Infinite);
+
+        }
+        private async void Search(object? state)
+        {
+            await InvokeAsync(QueryDataAsync);
+        }
+        #endregion
 
         public void Dispose()
         {

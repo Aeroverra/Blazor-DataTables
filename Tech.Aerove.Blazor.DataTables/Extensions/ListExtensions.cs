@@ -5,6 +5,7 @@ using System.Linq.Dynamic.Core;
 using System.Text;
 using System.Threading.Tasks;
 using Tech.Aerove.Blazor.DataTables.Models;
+using Tech.Aerove.Blazor.DataTables.Models;
 
 namespace Tech.Aerove.Blazor.DataTables.Extensions
 {

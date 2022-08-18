@@ -2,18 +2,41 @@
 @using System.Diagnostics.CodeAnalysis
 
 <div class="datatable">
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            @if (DataLengthAttribute.IsEnabled<TItem>())
+            {
+                <div class="dataTables_length" id="basic-datatable_length">
+                    <label class="form-label">
+                        <select name="basic-datatable_length" class="form-control form-control-sm form-select form-select-sm" @onchange="OnLengthChangeAsync">
+                            @foreach (var length in DataLengthAttribute.GetLengths<TItem>())
+                            {
+                                <option value="@length">@length</option>
+                            }
+                        </select>
+                    </label>
+                </div>
+            }
+        </div>
+        <div class="col-sm-12 col-md-6">
+            @if (Columns.Searchable())
+            {
+                <div id="basic-datatable_filter" class="dataTables_filter">
+                    <label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="basic-datatable" @bind="TableData.SearchInput" @oninput="OnSearchChange"></label>
+                </div>
+            }
+        </div>
+    </div>
     <table @attributes="InputAttributes">
         <thead>
             <tr>
                 @if (TableHead is not null)
                 {
-                    @foreach (var col in Columns)
+                    @foreach (var col in Columns.Where(x => x.Render))
                     {
-                        var param = new TableHeadColumn<TItem>(Items, col);
-                        <CascadingValue Value="TableData">
-                            <CascadingValue Value="param.Name">
-                                @TableHead(param)
-                            </CascadingValue>
+                        var param = new TemplateTableHeadModel<TItem>(Items, col.PropertyInfo);
+                        <CascadingValue Value="col">
+                            @TableHead(param)
                         </CascadingValue>
 
                     }
@@ -26,9 +49,9 @@
                 if (TableBody is not null)
                 {
                     <tr>
-                        @foreach (var col in Columns)
+                        @foreach (var col in Columns.Where(x => x.Render))
                         {
-                            var param = new TableRowColumn<TItem>(Items, item, col);
+                            var param = new TemplateTableBodyModel<TItem>(Items, item, col.PropertyInfo);
 
                             @* this will be passed to ColumnName in the Column Component*@
                             <CascadingValue Value="param.Name">

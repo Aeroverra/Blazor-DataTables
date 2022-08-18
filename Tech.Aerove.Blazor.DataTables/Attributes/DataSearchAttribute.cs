@@ -1,17 +1,15 @@
-﻿namespace Tech.Aerove.Blazor.DataTables.Attributes
+﻿using Tech.Aerove.Blazor.DataTables.Models.Enums;
+
+namespace Tech.Aerove.Blazor.DataTables.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class DataSearchAttribute : Attribute
+    public class DataFilterableAttribute : Attribute
     {
+        public bool Filterable { get; private set; }
 
-        /// <summary>
-        /// aka == or contains
-        /// </summary>
-        public bool Exact { get; private set; }
-
-        public DataSearchAttribute(bool exact)
+        public DataFilterableAttribute(bool filterable)
         {
-            Exact = exact;
+            Filterable = filterable;
         }
 
     }

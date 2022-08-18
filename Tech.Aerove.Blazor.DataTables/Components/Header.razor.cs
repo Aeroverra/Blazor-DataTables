@@ -11,29 +11,27 @@ namespace Tech.Aerove.Blazor.DataTables.Components
     public partial class Header : IDisposable
     {
         [CascadingParameter]
-        private string ColumnName { get; set; } = null!; //name of the column this is rendering
+        private ColumnInfoModel Model { get; set; } = null!; 
 
-        [CascadingParameter]
-        private TableData TableData { get; set; } = null!;
 
         [Parameter(CaptureUnmatchedValues = true)]
         public Dictionary<string, object>? InputAttributes { get; set; }
 
         [Parameter]
-        public string? Name { get; set; } //Pass the name 
+        public string? Name { get; set; } //User Passed Name to specify which header this should be
 
         [Parameter]
-        public RenderFragment? ChildContent { get; set; }//inner content
+        public RenderFragment? ChildContent { get; set; }//inner content created by user
 
         private bool Render = false;
         private OrderableDirection Direction = OrderableDirection.None;
 
         protected override void OnInitialized()
         {
-            if (Name == ColumnName || Name == null)
+            if (Name == Model.Name || Name == null)
             {
                 Render = true;
-                TableData.OnOrderReset += OnOrderReset;
+                Model.TableData.OnOrderReset += OnOrderReset;
             }
             base.OnInitialized();
         }
@@ -49,7 +47,7 @@ namespace Tech.Aerove.Blazor.DataTables.Components
 
             if (args.ShiftKey == false)
             {
-                TableData.ResetOrder();
+                Model.TableData.ResetOrder();
             }
 
 
@@ -62,21 +60,21 @@ namespace Tech.Aerove.Blazor.DataTables.Components
 
             if(Direction != OrderableDirection.None)
             {
-                if (TableData.Orderables.Any(x => x.PropertyName == ColumnName))
+                if (Model.TableData.OrderableCommands.Any(x => x.PropertyName == Model.Name))
                 {
-                    TableData.Orderables.RemoveAll(x => x.PropertyName == ColumnName);
+                    Model.TableData.OrderableCommands.RemoveAll(x => x.PropertyName == Model.Name);
                 }
-                TableData.Orderables.Add(new OrderCommand(ColumnName, Direction));
+                Model.TableData.OrderableCommands.Add(new OrderCommand(Model.Name, Direction));
             }
 
-            await TableData?.UpdateAsync();
+            await Model.TableData?.UpdateAsync();
         }
 
         public void Dispose()
         {
             if (Render)
             {
-                TableData.OnOrderReset -= OnOrderReset;
+                Model.TableData.OnOrderReset -= OnOrderReset;
             }
         }
     }
