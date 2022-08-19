@@ -11,7 +11,7 @@ namespace Tech.Aerove.Blazor.DataTables.Components
     public partial class Header : IDisposable
     {
         [CascadingParameter]
-        private ColumnInfoModel Model { get; set; } = null!; 
+        private ColumnInfoModel Model { get; set; } = null!;
 
 
         [Parameter(CaptureUnmatchedValues = true)]
@@ -26,6 +26,17 @@ namespace Tech.Aerove.Blazor.DataTables.Components
         private bool Render = false;
         private OrderableDirection Direction = OrderableDirection.None;
 
+        protected override void OnParametersSet()
+        {
+            if (Model.Orderable)
+            {
+                var attributeClass = InputAttributes?.SingleOrDefault(x => x.Key == "class");
+                if (attributeClass == null) { return; }
+                if ($"{attributeClass.Value.Value}".Contains("orderable")) { return; }
+                InputAttributes?.Remove(attributeClass.Value.Key);
+                InputAttributes?.Add(attributeClass.Value.Key, $"{attributeClass.Value.Value} orderable");
+            }
+        }
         protected override void OnInitialized()
         {
             if (Name == Model.Name || Name == null)
@@ -58,7 +69,7 @@ namespace Tech.Aerove.Blazor.DataTables.Components
                 case OrderableDirection.Descending: Direction = OrderableDirection.None; break;
             }
 
-            if(Direction != OrderableDirection.None)
+            if (Direction != OrderableDirection.None)
             {
                 if (Model.TableData.OrderableCommands.Any(x => x.PropertyName == Model.Name))
                 {
