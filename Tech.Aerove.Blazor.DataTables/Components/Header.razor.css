@@ -10,7 +10,7 @@
         left: auto;
         content: "↑";
         position: absolute;
-        bottom: 0.9em;
+       /* bottom: 0.9em;*/
         display: block;
         opacity: .3;
     }
@@ -21,7 +21,7 @@
         left: auto;
         content: "↓";
         position: absolute;
-        bottom: 0.9em;
+        bottom: 0.5em;
         display: block;
         opacity: .3;
     }
