@@ -2,7 +2,7 @@
 
 namespace Tech.Aerove.Blazor.DataTables.Attributes
 {
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
     public class DataFilterableAttribute : Attribute
     {
         public bool Filterable { get; private set; }

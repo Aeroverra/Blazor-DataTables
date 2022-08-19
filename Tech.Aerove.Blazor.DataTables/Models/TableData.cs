@@ -10,7 +10,7 @@
         internal int TotalPages => (RecordsFiltered / Length + (RecordsFiltered % Length > 0 ? 1 : 0));
         internal string SearchInput { get; set; } = "";
         internal List<OrderCommand> OrderableCommands = new List<OrderCommand>();
-
+        internal List<FilterModel> Filters = new List<FilterModel>();
         internal event EventHandler? OnOrderReset;
         internal Func<Task>? UpdateAsync;
 

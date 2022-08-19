@@ -66,6 +66,20 @@ namespace Tech.Aerove.Blazor.DataTables.Models
             return TableData.SetPageAsync(page);
         }
 
+        /// <summary>
+        /// This can be hooked to an onchange attached to a select list
+        /// null data or empty string will remove the filter
+        /// </summary>
+        /// <param name="columnName">exact database column name</param>
+        /// <param name="data">a string or a list of strings</param>
+        /// <returns></returns>
+        public Task SetFilterAsync(string columnName, object? data)
+        {
+            CheckSource();
+            TableData.Filters.SetFilter(columnName, data);
+            return UpdateAsync();
+        }
+
         private void CheckSource()
         {
             if (TableData == null || TableData.UpdateAsync == null)

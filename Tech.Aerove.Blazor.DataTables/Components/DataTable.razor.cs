@@ -41,6 +41,7 @@ namespace Tech.Aerove.Blazor.DataTables.Components
         protected override async Task OnInitializedAsync()
         {
             Columns = ColumnInfoModel.GetColumns<TItem>(TableData);
+            TableData.Filters.PopulateFilterList(Columns);
             if (DataSource != null)
             {
                 TableData.UpdateAsync = QueryDataAsync;
@@ -109,6 +110,7 @@ namespace Tech.Aerove.Blazor.DataTables.Components
                     }
                     query = query.Where(string.Join(" || ", searchStrings), searchParams.ToArray());
                 }
+                query = TableData.Filters.AddToQuery(query);
                 TableData.RecordsFiltered = await query.CountAsync();
 
                 query = TableData.OrderableCommands.OrderQuery(query);
