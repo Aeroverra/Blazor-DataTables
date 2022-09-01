@@ -35,8 +35,10 @@ namespace Tech.Aerove.Blazor.DataTables.Components
                 if ($"{attributeClass.Value.Value}".Contains("orderable")) { return; }
                 InputAttributes?.Remove(attributeClass.Value.Key);
                 InputAttributes?.Add(attributeClass.Value.Key, $"{attributeClass.Value.Value} orderable");
+                SetOrderClass(Direction.GetClass());
             }
         }
+
         protected override void OnInitialized()
         {
             if (Name == Model.Name || Name == null)
@@ -50,6 +52,7 @@ namespace Tech.Aerove.Blazor.DataTables.Components
         public void OnOrderReset(object? sender, EventArgs args)
         {
             Direction = OrderableDirection.None;
+            SetOrderClass(Direction.GetClass());
         }
 
         private async Task ChangeDirectionAsync(MouseEventArgs args)
@@ -68,6 +71,7 @@ namespace Tech.Aerove.Blazor.DataTables.Components
                 case OrderableDirection.Ascending: Direction = OrderableDirection.Descending; break;
                 case OrderableDirection.Descending: Direction = OrderableDirection.None; break;
             }
+            SetOrderClass(Direction.GetClass());
 
             if (Direction != OrderableDirection.None)
             {
@@ -77,10 +81,18 @@ namespace Tech.Aerove.Blazor.DataTables.Components
                 }
                 Model.TableData.OrderableCommands.Add(new OrderCommand(Model.Name, Direction));
             }
-
+       
             await Model.TableData?.UpdateAsync();
         }
-
+        private void SetOrderClass(string orderClass)
+        {
+            var attributeClass = InputAttributes?.SingleOrDefault(x => x.Key == "class");
+            if (attributeClass == null) { return; }
+            InputAttributes?.Remove(attributeClass.Value.Key);
+            var value = $"{attributeClass.Value.Value}";
+            value = value.Replace("asc", "").Replace("desc", "");
+            InputAttributes?.Add(attributeClass.Value.Key, $"{value} {orderClass}");
+        }
         public void Dispose()
         {
             if (Render)
