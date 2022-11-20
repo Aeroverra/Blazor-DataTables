@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 
 namespace Tech.Aerove.Blazor.DataTables.Attributes
 {
@@ -41,11 +36,7 @@ namespace Tech.Aerove.Blazor.DataTables.Attributes
         public static List<int> GetLengths<TItem>()
         {
             var lengthAttribute = Get<TItem>();
-            if (lengthAttribute == null)
-            {
-                return new List<int> { 10, 25, 50, 100 };
-            }
-            return lengthAttribute.Lengths;
+            return lengthAttribute == null ? new List<int> { 10, 25, 50, 100 } : lengthAttribute.Lengths;
         }
     }
 }

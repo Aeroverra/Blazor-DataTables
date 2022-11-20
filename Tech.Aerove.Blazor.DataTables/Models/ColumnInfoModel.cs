@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using Tech.Aerove.Blazor.DataTables.Attributes;
-using Tech.Aerove.Blazor.DataTables.Components;
 using Tech.Aerove.Blazor.DataTables.Models.Enums;
 
 namespace Tech.Aerove.Blazor.DataTables.Models

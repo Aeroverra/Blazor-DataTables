@@ -1,6 +1,4 @@
 ﻿using System.Reflection;
-using Tech.Aerove.Blazor.DataTables.Attributes;
-using Tech.Aerove.Blazor.DataTables.Components;
 
 namespace Tech.Aerove.Blazor.DataTables.Models
 {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Tech.Aerove.Blazor.DataTables.Models
+﻿namespace Tech.Aerove.Blazor.DataTables.Models
 {
 
     /// <summary>
@@ -14,11 +8,11 @@ namespace Tech.Aerove.Blazor.DataTables.Models
     {
         public string PropertyName { get; set; }
         public OrderableDirection Direction { get; set; }
-  
+
 
         public OrderCommand(string propertyName, OrderableDirection direction)
         {
-            PropertyName= propertyName;
+            PropertyName = propertyName;
             Direction = direction;
         }
     }

@@ -3,7 +3,7 @@
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
     public class DataRenderAttribute : Attribute
     {
-        public bool Render { get; private set; } 
+        public bool Render { get; private set; }
 
         public DataRenderAttribute(bool render)
         {

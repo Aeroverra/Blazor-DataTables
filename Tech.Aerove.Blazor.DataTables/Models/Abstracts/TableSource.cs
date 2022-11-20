@@ -1,6 +1,4 @@
-﻿using static System.Net.Mime.MediaTypeNames;
-
-namespace Tech.Aerove.Blazor.DataTables.Models
+﻿namespace Tech.Aerove.Blazor.DataTables.Models
 {
     public abstract class TableSource<TItem> : IDisposable
     {

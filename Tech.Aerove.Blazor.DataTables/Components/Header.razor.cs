@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Tech.Aerove.Blazor.DataTables.Models;
@@ -81,7 +77,7 @@ namespace Tech.Aerove.Blazor.DataTables.Components
                 }
                 Model.TableData.OrderableCommands.Add(new OrderCommand(Model.Name, Direction));
             }
-       
+
             await Model.TableData?.UpdateAsync();
         }
         private void SetOrderClass(string orderClass)

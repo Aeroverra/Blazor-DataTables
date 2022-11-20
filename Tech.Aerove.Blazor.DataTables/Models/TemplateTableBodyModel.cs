@@ -23,11 +23,7 @@ namespace Tech.Aerove.Blazor.DataTables.Models
 
         public T? GetValue<T>()
         {
-            if (Value == null)
-            {
-                return default;
-            }
-            return (T)Value;
+            return Value == null ? default : (T)Value;
         }
 
     }

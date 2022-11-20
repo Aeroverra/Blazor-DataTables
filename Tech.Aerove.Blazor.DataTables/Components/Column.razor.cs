@@ -1,21 +1,19 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Components;
 
 namespace Tech.Aerove.Blazor.DataTables.Components
 {
     public partial class Column
     {
-        [CascadingParameter] 
+        [CascadingParameter]
         private string ColumnName { get; set; } = null!; //name of the column this is rendering
-       
-        [Parameter(CaptureUnmatchedValues = true)] 
+
+        [Parameter(CaptureUnmatchedValues = true)]
         public Dictionary<string, object>? InputAttributes { get; set; }
-        
-        [Parameter] 
+
+        [Parameter]
         public string? Name { get; set; } //Pass the name 
 
-        [Parameter] 
+        [Parameter]
         public RenderFragment? ChildContent { get; set; }//inner content
     }
 }

@@ -1,6 +1,4 @@
-﻿using Tech.Aerove.Blazor.DataTables.Models.Enums;
-
-namespace Tech.Aerove.Blazor.DataTables.Attributes
+﻿namespace Tech.Aerove.Blazor.DataTables.Attributes
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
     public class DataFilterableAttribute : Attribute

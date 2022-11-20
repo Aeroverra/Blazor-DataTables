@@ -46,31 +46,35 @@
         internal Task SetLengthAsync(int length)
         {
             Length = length;
-            if (UpdateAsync != null)
-            {
-                return UpdateAsync();
-            }
-            return Task.CompletedTask;
+            return UpdateAsync != null ? UpdateAsync() : Task.CompletedTask;
         }
 
         internal Task SetPageAsync(int page)
         {
             Page = page;
             Start = (Page - 1) * Length;
-            if (UpdateAsync != null)
-            {
-                return UpdateAsync();
-            }
-            return Task.CompletedTask;
+            return UpdateAsync != null ? UpdateAsync() : Task.CompletedTask;
         }
 
-        internal Task SetPageNextAsync() => SetPageAsync(Page + 1);
+        internal Task SetPageNextAsync()
+        {
+            return SetPageAsync(Page + 1);
+        }
 
-        internal Task SetPagePreviousAsync() => SetPageAsync(Page - 1);
+        internal Task SetPagePreviousAsync()
+        {
+            return SetPageAsync(Page - 1);
+        }
 
-        internal Task SetPageFirstAsync() => SetPageAsync(1);
+        internal Task SetPageFirstAsync()
+        {
+            return SetPageAsync(1);
+        }
 
-        internal Task SetPageLastAsync() => SetPageAsync(TotalPages);
+        internal Task SetPageLastAsync()
+        {
+            return SetPageAsync(TotalPages);
+        }
 
         internal string GetResultdescriptor()
         {

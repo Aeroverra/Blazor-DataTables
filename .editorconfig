@@ -95,3 +95,6 @@ dotnet_style_null_propagation = true
 dotnet_style_qualification_for_property = false:silent 
 dotnet_style_qualification_for_method = false:silent 
 dotnet_style_qualification_for_event = false:silent 
+
+# IDE0045: Convert to conditional expression
+dotnet_style_prefer_conditional_expression_over_assignment = false
