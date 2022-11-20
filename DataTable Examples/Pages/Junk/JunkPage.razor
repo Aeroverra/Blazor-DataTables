@@ -1,0 +1,43 @@
+﻿@page "/Users/JunkPage"
+@inherits ComponentBase
+@using Tech.Aerove.Blazor.DataTables.Components
+
+<h3>UsersPage</h3>
+
+<div class="row">
+    <div class="col-3 offset-6">
+
+        <select title="Portfolio" class="form-select" @onchange="@((e)=>Source.SetFilterAsync(nameof(JunkModel.Id),e.Value))" multiple>
+            <option value="">Id</option>
+            @for (var x = 0; x < 6; x++)
+            {
+                <option value="@x">@x</option>
+            }
+        </select>
+    </div>
+    <div class="col-3">
+
+        <select title="Date" class="form-select" @onchange="@((e)=>Source.SetFilterAsync(nameof(JunkModel.Date),e.Value))">
+            <option value="">Date</option>
+            @for (var x = 0; x < 6; x++)
+            {
+                <option value="@DateTime.Now.AddDays(x)">@DateTime.Now.AddDays(x).ToShortDateString()</option>
+            }
+        </select>
+    </div>
+    <div class="col-12">
+        <DataTable DataSource="Source" Context="Data" class="table table-sm dt-responsive nowrap w-100">
+            <TableTopRight></TableTopRight>
+            <TableHead>
+                <Header class="table-active">@Data.Name</Header>
+            </TableHead>
+            <TableBody>
+
+                <Column>
+                    @Data.Value
+                </Column>
+
+            </TableBody>
+        </DataTable>
+    </div>
+</div>
