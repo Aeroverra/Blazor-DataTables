@@ -4,9 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-Tech.Aerove.Blazor.DataTables.Examples-d824c410-0d35-4ebe-a62b-12b53f9e96e4</UserSecretsId>
-    <AssemblyName>Tech.Aerove.Blazor.DataTables.Examples</AssemblyName>
-    <RootNamespace>Tech.Aerove.Blazor.DataTables.Examples</RootNamespace>
+    <UserSecretsId>aspnet-DataTable_Examples-8a5aec1f-cccb-4dd5-81fc-6b904685b38e</UserSecretsId>
+    <RootNamespace>DataTable_Examples</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +14,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tech.Aerove.Blazor.DataTables\Tech.Aerove.Blazor.DataTables.csproj" />
   </ItemGroup>
 
 </Project>

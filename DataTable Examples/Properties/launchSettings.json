@@ -3,16 +3,16 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:55316",
-      "sslPort": 44321
+      "applicationUrl": "http://localhost:14163",
+      "sslPort": 44300
     }
   },
   "profiles": {
-    "Tech.Aerove.Blazor.DataTables.Examples": {
+    "DataTable Examples": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:7084;http://localhost:5015",
+      "applicationUrl": "https://localhost:7182;http://localhost:5231",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

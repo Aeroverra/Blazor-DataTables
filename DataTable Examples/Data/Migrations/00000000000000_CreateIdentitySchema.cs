@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 
-namespace Tech.Aerove.Blazor.DataTables.Examples.Data.Migrations
+namespace DataTable_Examples.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

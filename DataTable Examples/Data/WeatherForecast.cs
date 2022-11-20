@@ -1,4 +1,4 @@
-namespace Tech.Aerove.Blazor.DataTables.Examples.Data
+namespace DataTable_Examples.Data
 {
     public class WeatherForecast
     {

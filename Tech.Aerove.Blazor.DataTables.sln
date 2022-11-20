@@ -5,12 +5,12 @@ VisualStudioVersion = 17.4.32804.182
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tech.Aerove.Blazor.DataTables", "Tech.Aerove.Blazor.DataTables\Tech.Aerove.Blazor.DataTables.csproj", "{5AC6261A-839D-4891-A828-23E68D457CF7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Examples", "Tech.Aerove.Blazor.DataTables.Examples\Examples.csproj", "{FD13CD40-3BCA-4E86-BA80-4A549CF6E23E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2692F8A5-1D4C-421D-BCCD-D293B26E8C69}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTable Examples", "DataTable Examples\DataTable Examples.csproj", "{C77F7BEA-119D-41E0-A0EF-E4BA2B15DC9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,10 +22,10 @@ Global
 		{5AC6261A-839D-4891-A828-23E68D457CF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5AC6261A-839D-4891-A828-23E68D457CF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5AC6261A-839D-4891-A828-23E68D457CF7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FD13CD40-3BCA-4E86-BA80-4A549CF6E23E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FD13CD40-3BCA-4E86-BA80-4A549CF6E23E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FD13CD40-3BCA-4E86-BA80-4A549CF6E23E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FD13CD40-3BCA-4E86-BA80-4A549CF6E23E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C77F7BEA-119D-41E0-A0EF-E4BA2B15DC9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C77F7BEA-119D-41E0-A0EF-E4BA2B15DC9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C77F7BEA-119D-41E0-A0EF-E4BA2B15DC9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C77F7BEA-119D-41E0-A0EF-E4BA2B15DC9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
