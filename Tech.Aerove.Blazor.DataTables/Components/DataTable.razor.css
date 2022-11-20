@@ -5,7 +5,7 @@
 .page-button {
     border-radius: 30px !important;
     height: 37px;
-    font-family: "IBM Plex Sans",sans-serif;
+/*    font-family: "IBM Plex Sans",sans-serif;*/
     margin: 0 3px;
     border: none;
     padding: 0.5rem 0.75rem;
@@ -53,7 +53,7 @@
 .result-descriptor {
     padding-top: 0.85em;
     font-weight: 600;
-    font-family: "IBM Plex Sans",sans-serif;
+/*    font-family: "IBM Plex Sans",sans-serif;*/
 }
 label {
     font-weight: normal;
@@ -67,7 +67,7 @@ input {
 }
 
 div {
-    font-family: "IBM Plex Sans",sans-serif;
+/*    font-family: "IBM Plex Sans",sans-serif;*/
 }
 .search {
     text-align: right;
