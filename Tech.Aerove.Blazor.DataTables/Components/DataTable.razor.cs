@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore.DynamicLinq;
+using Microsoft.EntityFrameworkCore.Query;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq.Dynamic.Core;
 using Tech.Aerove.Blazor.DataTables.Attributes;
@@ -57,7 +58,15 @@ namespace Tech.Aerove.Blazor.DataTables.Components
 
                 var query = DataSource.GetQuery();
 
-                TableData.RecordsTotal = await query.CountAsync();
+                if (query is IAsyncQueryProvider)
+                {
+                    TableData.RecordsTotal = await query.CountAsync();
+                }
+                else
+                {
+                    TableData.RecordsTotal = query.Count();
+                }
+
 
                 //WARNING: This uses params to prevent SQL Injection!
                 if (Columns.Searchable() && !string.IsNullOrWhiteSpace(TableData.SearchInput))
@@ -107,7 +116,15 @@ namespace Tech.Aerove.Blazor.DataTables.Components
                     query = query.Where(string.Join(" || ", searchStrings), searchParams.ToArray());
                 }
                 query = TableData.Filters.AddToQuery(query);
-                TableData.RecordsFiltered = await query.CountAsync();
+
+                if (query is IAsyncQueryProvider)
+                {
+                    TableData.RecordsFiltered = await query.CountAsync();
+                }
+                else
+                {
+                    TableData.RecordsFiltered = query.Count();
+                }
 
                 query = TableData.OrderableCommands.OrderQuery(query);
 

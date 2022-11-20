@@ -5,23 +5,23 @@
 }
 
     th.orderable::before {
-        /*font-family: "IBM Plex Sans",sans-serif;*/
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         right: 1em;
         left: auto;
         content: "↑";
         position: absolute;
-       /* bottom: 0.9em;*/
+        bottom: 0.4em;
         display: block;
         opacity: .3;
     }
 
     th.orderable::after {
-       /* font-family: "IBM Plex Sans",sans-serif;*/
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         right: 0.5em;
         left: auto;
         content: "↓";
         position: absolute;
-        bottom: 0.5em;
+        bottom: 0.4em;
         display: block;
         opacity: .3;
     }
