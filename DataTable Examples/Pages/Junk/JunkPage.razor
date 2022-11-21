@@ -24,16 +24,34 @@
                 <option value="@DateTime.Now.AddDays(x)">@DateTime.Now.AddDays(x).ToShortDateString()</option>
             }
         </select>
-    </div>
+    </div> 
     <div class="col-12">
-        <DataTable DataSource="Source" Context="Data" class="table table-sm dt-responsive nowrap w-100">
-            <TableTopRight></TableTopRight>
+        <DataTable DataSource="Source" Context="Data" class="table table-responsive table-sm">
+
             <TableHead>
                 <Header class="table-active">@Data.Name</Header>
             </TableHead>
             <TableBody>
 
-                <Column>
+                <Column scope="row" Name="@nameof(JunkModel.Id)" class="">
+                    @Data.Value
+                </Column>
+                <Column Name="@nameof(JunkModel.Date)" class="">
+                    @Data.Value
+                </Column>
+                <Column Name="@nameof(JunkModel.Guid)" class="">
+                    @Data.Value
+                </Column>
+                <Column Name="@nameof(JunkModel.Guid2)" class="">
+                    @Data.Value
+                </Column>
+                <Column Name="@nameof(JunkModel.Guid3)" class="">
+                    @Data.Value
+                </Column>
+                <Column Name="@nameof(JunkModel.Email)" class="">
+                    @Data.Value
+                </Column>
+                <Column Name="@nameof(JunkModel.Phone)" class="">
                     @Data.Value
                 </Column>
 
@@ -41,3 +59,6 @@
         </DataTable>
     </div>
 </div>
+<br />
+<br />
+<br />

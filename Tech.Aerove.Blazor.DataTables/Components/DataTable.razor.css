@@ -1,18 +1,16 @@
-﻿table {
-    margin-bottom: 15px;
+﻿.table-bottom {
+    margin-top: -1em;
 }
 
 .page-button {
+    cursor: pointer;
     border-radius: 30px !important;
     height: 37px;
-/*    font-family: "IBM Plex Sans",sans-serif;*/
     margin: 0 3px;
     border: none;
     padding: 0.5rem 0.75rem;
     position: relative;
     display: block;
-    color: #343a40;
-    /*    background-color: #fff;*/
     border: 1px solid transparent;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
@@ -30,9 +28,6 @@
 
 .page-li.active .page-button {
     z-index: 3;
-    /*    color: #fff;*/
-    /*    background-color: #5369f8;*/
-    /*    border-color: #5369f8;*/
 }
 
 .page-li.disabled {
@@ -53,22 +48,10 @@
 .result-descriptor {
     padding-top: 0.85em;
     font-weight: 600;
-/*    font-family: "IBM Plex Sans",sans-serif;*/
 }
-label {
-    font-weight: normal;
-    white-space: nowrap;
-    text-align: left;
-}
+
 input {
     margin-left: 0.5em;
     display: inline-block;
     width: auto;
-}
-
-div {
-/*    font-family: "IBM Plex Sans",sans-serif;*/
-}
-.search {
-    text-align: right;
 }

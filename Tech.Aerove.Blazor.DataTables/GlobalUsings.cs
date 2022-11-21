@@ -1,0 +1,9 @@
+﻿global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Text;
+global using System.Threading.Tasks;
+global using Tech.Aerove.Blazor.DataTables.Extensions;
+global using Tech.Aerove.Blazor.DataTables.Models;
+global using Tech.Aerove.Blazor.DataTables.Attributes;
+global using Tech.Aerove.Blazor.DataTables.Components;

@@ -1,4 +1,12 @@
-﻿<AuthorizeView>
+﻿<div class=" bg-danger">
+    <div class="d-block d-sm-none">XS</div>
+    <div class="d-none d-sm-block d-md-none">SM</div>
+    <div class="d-none d-md-block d-lg-none">MD</div>
+    <div class="d-none d-lg-block d-xl-none">LG</div>
+    <div class="d-none d-xl-block d-xxl-none">XL</div>
+    <div class="d-none d-xxl-block">XXL</div>
+</div>
+<AuthorizeView>
     <Authorized>
         <a href="Identity/Account/Manage">Hello, @context.User.Identity?.Name!</a>
         <form method="post" action="Identity/Account/LogOut">

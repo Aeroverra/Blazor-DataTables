@@ -2,13 +2,13 @@
 {
     if (Model.Orderable)
     {
-        <th class="orderable @Direction.GetClass()" @attributes="InputAttributes" @onclick="ChangeDirectionAsync">
+        <th scope="col" class="orderable @Direction.GetClass()" @attributes="InputAttributes" @onclick="ChangeDirectionAsync">
             @ChildContent
         </th>
     }
     else
     {
-        <th @attributes="InputAttributes">
+        <th scope="col" @attributes="InputAttributes">
             @ChildContent
         </th>
     }

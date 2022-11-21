@@ -1,7 +1,9 @@
 ﻿th {
-    padding-right: 30px;
-    cursor: pointer;
+    padding-right: 2em;
     position: relative;
+}
+th.orderable {
+    cursor: pointer;
 }
 
     th.orderable::before {
@@ -10,7 +12,7 @@
         left: auto;
         content: "↑";
         position: absolute;
-        bottom: 0.4em;
+        bottom: 0.45em;
         display: block;
         opacity: .3;
     }
@@ -21,7 +23,7 @@
         left: auto;
         content: "↓";
         position: absolute;
-        bottom: 0.4em;
+        bottom: 0.45em;
         display: block;
         opacity: .3;
     }
