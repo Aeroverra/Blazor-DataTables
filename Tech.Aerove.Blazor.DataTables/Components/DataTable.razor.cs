@@ -9,43 +9,52 @@ using Tech.Aerove.Blazor.DataTables.Models;
 
 namespace Tech.Aerove.Blazor.DataTables.Components
 {
-    public partial class DataTable<TItem> : IDisposable
+    /// <summary>
+    /// Main Component which handles the initial instantiation of the sub components and shared data
+    /// </summary>
+    /// <typeparam name="TItem">The Object type to be queried</typeparam>
+    public partial class DataTable<TItem> : ComponentBase, IDisposable
     {
-        #region params
-
-        //Render Templates
+        /// <summary>
+        /// The Table Head render template. If not specified no table heade will be generated
+        /// </summary>
         [Parameter] public RenderFragment<TemplateTableHeadModel<TItem>>? TableHead { get; set; }
+
+        /// <summary>
+        /// The Table Body render template. If not specified no table heade will be generated
+        /// </summary>
         [Parameter] public RenderFragment<TemplateTableBodyModel<TItem>>? TableBody { get; set; }
 
-
-        [Parameter, AllowNull] public List<TItem> Items { get; set; } = new List<TItem>();
-        [Parameter, AllowNull] public TableSource<TItem>? DataSource { get; set; }
+        /// <summary>
+        /// The Source of the data which will be queries. Defined by the User
+        /// </summary>
+        [Parameter, AllowNull] public TableSource<TItem> DataSource { get; set; }
 
         /// <summary>
         /// Table attributes that will be pasted to the html table element
         /// </summary>
-        [Parameter(CaptureUnmatchedValues = true)]
-        public Dictionary<string, object>? InputAttributes { get; set; }
-        #endregion
+        [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? InputAttributes { get; set; }
 
-        internal TableData TableData = new TableData();
+        /// <summary>
+        /// Central communication Between all components
+        /// </summary>
+        internal TableNetwork<TItem> Network = new TableNetwork<TItem>();
 
-        internal List<ColumnInfoModel> Columns = new List<ColumnInfoModel>();
+        protected override void OnParametersSet()
+        {
+            Network.InputAttributes = InputAttributes;
+        }
 
         protected override async Task OnInitializedAsync()
         {
-            Columns = ColumnInfoModel.GetColumns<TItem>(TableData);
-            TableData.Filters.PopulateFilterList(Columns);
-            if (DataSource != null)
-            {
-                TableData.UpdateAsync = QueryDataAsync;
-                DataSource.TableData = TableData;
-                await QueryDataAsync();
-            }
+            Network.TableData.UpdateAsync = QueryDataAsync;
+            DataSource.TableData = Network.TableData;
+            await QueryDataAsync();
 
         }
 
         private SemaphoreSlim QueryLock = new SemaphoreSlim(1);
+
         private async Task QueryDataAsync()
         {
             if (DataSource == null) { return; }
@@ -57,20 +66,20 @@ namespace Tech.Aerove.Blazor.DataTables.Components
 
                 if (query is IAsyncQueryProvider)
                 {
-                    TableData.RecordsTotal = await query.CountAsync();
+                    Network.TableData.RecordsTotal = await query.CountAsync();
                 }
                 else
                 {
-                    TableData.RecordsTotal = query.Count();
+                    Network.TableData.RecordsTotal = query.Count();
                 }
 
 
                 //WARNING: This uses params to prevent SQL Injection!
-                if (Columns.Searchable() && !string.IsNullOrWhiteSpace(TableData.SearchInput))
+                if (Network.Columns.Searchable() && !string.IsNullOrWhiteSpace(Network.TableData.SearchInput))
                 {
                     List<string> searchStrings = new List<string>();
-                    List<object> searchParams = new List<object>() { TableData.SearchInput };
-                    foreach (var column in Columns.Where(x => x.SearchMode != Models.Enums.SearchMode.None))
+                    List<object> searchParams = new List<object>() { Network.TableData.SearchInput };
+                    foreach (var column in Network.Columns.Where(x => x.SearchMode != Models.Enums.SearchMode.None))
                     {
                         if (column.Type.IsEnum)
                         {
@@ -79,14 +88,14 @@ namespace Tech.Aerove.Blazor.DataTables.Components
                             if (column.SearchMode == Models.Enums.SearchMode.Exact)
                             {
                                 enumResults = enumNames
-                                   .Where(x => x.ToLower() == TableData.SearchInput.ToLower())
+                                   .Where(x => x.ToLower() == Network.TableData.SearchInput.ToLower())
                                    .Select(x => (int)Enum.Parse(column.Type, x))
                                    .ToList();
                             }
                             else
                             {
                                 enumResults = enumNames
-                                    .Where(x => x.ToLower().Contains(TableData.SearchInput.ToLower()))
+                                    .Where(x => x.ToLower().Contains(Network.TableData.SearchInput.ToLower()))
                                     .Select(x => (int)Enum.Parse(column.Type, x))
                                     .ToList();
                             }
@@ -112,27 +121,27 @@ namespace Tech.Aerove.Blazor.DataTables.Components
                     }
                     query = query.Where(string.Join(" || ", searchStrings), searchParams.ToArray());
                 }
-                query = TableData.Filters.AddToQuery(query);
+                query = Network.TableData.Filters.AddToQuery(query);
 
                 if (query is IAsyncQueryProvider)
                 {
-                    TableData.RecordsFiltered = await query.CountAsync();
+                    Network.TableData.RecordsFiltered = await query.CountAsync();
                 }
                 else
                 {
-                    TableData.RecordsFiltered = query.Count();
+                    Network.TableData.RecordsFiltered = query.Count();
                 }
 
-                query = TableData.OrderableCommands.OrderQuery(query);
+                query = Network.TableData.OrderableCommands.OrderQuery(query);
 
-                query = query.Skip((TableData.Page - 1) * TableData.Length);
+                query = query.Skip((Network.TableData.Page - 1) * Network.TableData.Length);
 
-                query = query.Take(TableData.Length);
+                query = query.Take(Network.TableData.Length);
 
                 var result = await DataSource.FinishQueryAsync(query);
 
-                Items.Clear();
-                Items.AddRange(result);
+                Network.Items.Clear();
+                Network.Items.AddRange(result);
                 await InvokeAsync(() => StateHasChanged());
                 QueryLock.Release();
             }
@@ -143,23 +152,6 @@ namespace Tech.Aerove.Blazor.DataTables.Components
             }
         }
 
-        private async Task OnLengthChangeAsync(ChangeEventArgs args)
-        {
-            var value = int.Parse($"{args.Value}");
-            var lengths = DataLengthAttribute.GetLengths<TItem>();
-            //Make sure the user isn't manipulating the values
-            if (!lengths.Contains(value))
-            {
-                return;
-            }
-            TableData.Length = value;
-            await TableData.UpdateAsync();
-        }
-
-        private void OnSearchChange(ChangeEventArgs args)
-        {
-            TableData.Search($"{args.Value}");
-        }
 
         public void Dispose()
         {

@@ -6,10 +6,7 @@ namespace DataTable_Examples.Pages.Junk
 {
     public partial class JunkPage : ComponentBase
     {
-        [Inject]
-        private IDbContextFactory<ApplicationDbContext> _databaseFactory { get; set; } = null!;
-
-        private JunkSource? Source;
+        private JunkSource Source = null!;
         protected override Task OnInitializedAsync()
         {
             Source = new JunkSource();

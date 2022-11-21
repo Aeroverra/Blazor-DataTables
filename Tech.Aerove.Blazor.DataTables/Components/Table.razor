@@ -1,0 +1,41 @@
+﻿@typeparam TItem
+@inherits ComponentBase
+<div class="@(Network.InputAttributes.HasClass("table-responsive")?"table-responsive":"")">
+    <table @attributes="Network.InputAttributes">
+        <thead>
+            <tr>
+                @if (TableHead is not null)
+                {
+                    @foreach (var col in Network.Columns.Where(x => x.Render))
+                    {
+                        var param = new TemplateTableHeadModel<TItem>(Network.Items, col.PropertyInfo);
+                        <CascadingValue Value="col">
+                            @TableHead(param)
+                        </CascadingValue>
+
+                    }
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Network.Items)
+            {
+                if (TableBody is not null)
+                {
+                    <tr>
+                        @foreach (var col in Network.Columns.Where(x => x.Render))
+                        {
+                            var param = new TemplateTableBodyModel<TItem>(Network.Items, item, col.PropertyInfo);
+
+                            @* this will be passed to ColumnName in the Column Component*@
+                            <CascadingValue Value="param.Name">
+                                @TableBody(param)
+                            </CascadingValue>
+
+                        }
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

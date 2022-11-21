@@ -4,8 +4,17 @@ using Tech.Aerove.Blazor.DataTables.Models;
 
 namespace Tech.Aerove.Blazor.DataTables.Components
 {
-    public partial class Header : IDisposable
+    /// <summary>
+    /// Used by the user to define a table header
+    /// </summary>
+    public partial class Header : ComponentBase, IDisposable
     {
+        /// <summary>
+        /// Central communication Between all components
+        /// Passed down from the DataTable Component
+        /// </summary>
+        [CascadingParameter] private TableNetwork Network { get; set; } = null!;
+
         [CascadingParameter]
         private ColumnInfoModel Model { get; set; } = null!;
 
@@ -40,7 +49,7 @@ namespace Tech.Aerove.Blazor.DataTables.Components
             if (Name == Model.Name || Name == null)
             {
                 Render = true;
-                Model.TableData.OnOrderReset += OnOrderReset;
+                Network.TableData.OnOrderReset += OnOrderReset;
             }
             base.OnInitialized();
         }
@@ -57,7 +66,7 @@ namespace Tech.Aerove.Blazor.DataTables.Components
 
             if (args.ShiftKey == false)
             {
-                Model.TableData.ResetOrder();
+                Network.TableData.ResetOrder();
             }
 
 
@@ -71,14 +80,14 @@ namespace Tech.Aerove.Blazor.DataTables.Components
 
             if (Direction != OrderableDirection.None)
             {
-                if (Model.TableData.OrderableCommands.Any(x => x.PropertyName == Model.Name))
+                if (Network.TableData.OrderableCommands.Any(x => x.PropertyName == Model.Name))
                 {
-                    Model.TableData.OrderableCommands.RemoveAll(x => x.PropertyName == Model.Name);
+                    Network.TableData.OrderableCommands.RemoveAll(x => x.PropertyName == Model.Name);
                 }
-                Model.TableData.OrderableCommands.Add(new OrderCommand(Model.Name, Direction));
+                Network.TableData.OrderableCommands.Add(new OrderCommand(Model.Name, Direction));
             }
 
-            await Model.TableData?.UpdateAsync();
+            await Network.TableData?.UpdateAsync();
         }
         private void SetOrderClass(string orderClass)
         {
@@ -93,7 +102,7 @@ namespace Tech.Aerove.Blazor.DataTables.Components
         {
             if (Render)
             {
-                Model.TableData.OnOrderReset -= OnOrderReset;
+                Network.TableData.OnOrderReset -= OnOrderReset;
             }
         }
     }

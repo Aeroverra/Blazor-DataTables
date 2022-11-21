@@ -1,107 +1,13 @@
-﻿@typeparam TItem
-@using System.Diagnostics.CodeAnalysis
+﻿@using System.Diagnostics.CodeAnalysis
+@typeparam TItem
+@inherits ComponentBase
 
+<CascadingValue Value="Network">
 
-<div class="row">
-    <div class="col-3 col-sm-6">
-        @if (DataLengthAttribute.IsEnabled<TItem>())
-        {
-            <div class="dataTables_length">
-                <label class="form-label">
-                    <select class="form-control form-control-sm form-select form-select-sm" @onchange="OnLengthChangeAsync">
-                        @foreach (var length in DataLengthAttribute.GetLengths<TItem>())
-                        {
-                            <option value="@length" selected="@(TableData.Length == length)">@length</option>
-                        }
-                    </select>
-                </label>
-            </div>
-        }
-    </div>
-    <div class="col-9 col-sm-6 text-end">
-        @if (Columns.Searchable())
-        {
+    <TableTop TItem="TItem" />
 
-            <label>
-                Search:
-                <input type="search" class="form-control form-control-sm" placeholder="" @bind="TableData.SearchInput" @oninput="OnSearchChange">
-            </label>
+    <Table TItem="TItem" TableHead="TableHead!" TableBody="TableBody!" />
 
-        }
-    </div>
-</div>
-<div class="@(InputAttributes.HasClass("table-responsive")?"table-responsive":"")">
-    <table @attributes="InputAttributes">
-        <thead>
-            <tr>
-                @if (TableHead is not null)
-                {
-                    @foreach (var col in Columns.Where(x => x.Render))
-                    {
-                        var param = new TemplateTableHeadModel<TItem>(Items, col.PropertyInfo);
-                        <CascadingValue Value="col">
-                            @TableHead(param)
-                        </CascadingValue>
+    <TableBottom TItem="TItem" />
 
-                    }
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Items)
-            {
-                if (TableBody is not null)
-                {
-                    <tr>
-                        @foreach (var col in Columns.Where(x => x.Render))
-                        {
-                            var param = new TemplateTableBodyModel<TItem>(Items, item, col.PropertyInfo);
-
-                            @* this will be passed to ColumnName in the Column Component*@
-                            <CascadingValue Value="param.Name">
-                                @TableBody(param)
-                            </CascadingValue>
-
-                        }
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
-</div>
-
-<div class="row table-bottom">
-    <div class="col-sm-12 col-md-5">
-        <div class="result-descriptor">
-            @TableData.GetResultdescriptor()
-        </div>
-    </div>
-    <div class="col-sm-12 col-md-7">
-        <ul class="page-list">
-            <li class="page-li first @(TableData.Page==1?"disabled":"")">
-                <span href="" class="page-button" @onclick="TableData.SetPageFirstAsync" @onclick:preventDefault>
-                    First
-                </span>
-            </li>
-            <li class="page-li left @(TableData.Page==1?"disabled":"")">
-                <span href="" class="page-button" @onclick="TableData.SetPagePreviousAsync" @onclick:preventDefault>
-                    &lt;
-                </span>
-            </li>
-            <li class="page-li active">
-                <span href="" class="page-button" @onclick:preventDefault>@TableData.Page</span>
-            </li>
-            <li class="page-li right @(TableData.Page==TableData.TotalPages?"disabled":"")">
-                <span href="" class="page-button" @onclick="TableData.SetPageNextAsync" @onclick:preventDefault>
-                    >
-                </span>
-            </li>
-            <li class="page-li last @(TableData.Page==TableData.TotalPages?"disabled":"")">
-                <span href="" class="page-button" @onclick="TableData.SetPageLastAsync" @onclick:preventDefault>
-                    Last
-                </span>
-            </li>
-        </ul>
-    </div>
-</div>
-
+</CascadingValue>

@@ -51,6 +51,11 @@ namespace Tech.Aerove.Blazor.DataTables.Models
             throw new Exception($"Object of type {value.GetType()} for field {name} not supported for filtering");
         }
 
+        /// <summary>
+        /// Creates filters for every column thats filterable
+        /// </summary>
+        /// <param name="filters">List of filters to populate</param>
+        /// <param name="columnInfo">Columns in our model</param>
         internal static void PopulateFilterList(this List<FilterModel> filters, List<ColumnInfoModel> columnInfo)
         {
             if (filters.Count() != 0)

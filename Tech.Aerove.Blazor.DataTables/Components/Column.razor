@@ -1,4 +1,5 @@
-﻿@if (Name == ColumnName || Name == null)
+﻿@inherits ComponentBase
+@if (Name == ColumnName || Name == null)
 {
     <td @attributes="InputAttributes">@ChildContent</td>
 }
