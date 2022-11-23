@@ -20,7 +20,7 @@ namespace Tech.Aerove.Blazor.DataTables.Components
 
 
         [Parameter(CaptureUnmatchedValues = true)]
-        public Dictionary<string, object>? InputAttributes { get; set; }
+        public Dictionary<string, object> InputAttributes { get; set; } = new Dictionary<string, object>();
 
         [Parameter]
         public string? Name { get; set; } //User Passed Name to specify which header this should be
@@ -35,11 +35,7 @@ namespace Tech.Aerove.Blazor.DataTables.Components
         {
             if (Model.Orderable)
             {
-                var attributeClass = InputAttributes?.SingleOrDefault(x => x.Key == "class");
-                if (attributeClass == null) { return; }
-                if ($"{attributeClass.Value.Value}".Contains("orderable")) { return; }
-                InputAttributes?.Remove(attributeClass.Value.Key);
-                InputAttributes?.Add(attributeClass.Value.Key, $"{attributeClass.Value.Value} orderable");
+                InputAttributes.AddStyleClass("orderable");
                 SetOrderClass(Direction.GetClass());
             }
         }
@@ -91,12 +87,10 @@ namespace Tech.Aerove.Blazor.DataTables.Components
         }
         private void SetOrderClass(string orderClass)
         {
-            var attributeClass = InputAttributes?.SingleOrDefault(x => x.Key == "class");
-            if (attributeClass == null) { return; }
-            InputAttributes?.Remove(attributeClass.Value.Key);
-            var value = $"{attributeClass.Value.Value}";
-            value = value.Replace("asc", "").Replace("desc", "");
-            InputAttributes?.Add(attributeClass.Value.Key, $"{value} {orderClass}");
+            InputAttributes.RemoveStyleClass("asc");
+            InputAttributes.RemoveStyleClass("desc");
+            InputAttributes.AddStyleClass(orderClass);
+
         }
         public void Dispose()
         {
