@@ -15,7 +15,7 @@ namespace Tech.Aerove.Blazor.DataTables.Components
         /// The Table Head render template. If not specified no table header will be generated. 
         /// Passed down from the DataTable Component
         /// </summary>
-        [Parameter] public RenderFragment<TemplateTableHeadModel<TItem>>? TableHead { get; set; }
+        [Parameter] public RenderFragment? TableHead { get; set; }
 
         /// <summary>
         /// The Table Body render template. If not specified no table heade will be generated

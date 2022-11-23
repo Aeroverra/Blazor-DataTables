@@ -8,23 +8,13 @@ namespace Tech.Aerove.Blazor.DataTables.Models
     /// <typeparam name="TItem"></typeparam>
     public class TemplateTableBodyModel<TItem>
     {
-        public string Name { get; set; }
-        public object? Value { get; set; }
         public TItem Item { get; set; }
         public List<TItem> Items { get; set; }
 
-        public TemplateTableBodyModel(List<TItem> items, TItem item, PropertyInfo propertyInfo)
+        public TemplateTableBodyModel(List<TItem> items, TItem item)
         {
             Items = items.ToList();
             Item = item;
-            Name = propertyInfo.Name;
-            Value = propertyInfo.GetValue(item);
         }
-
-        public T? GetValue<T>()
-        {
-            return Value == null ? default : (T)Value;
-        }
-
     }
 }

@@ -1,6 +1,5 @@
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using Tech.Aerove.Blazor.DataTables.Models;
+using Microsoft.AspNetCore.Components;
 
 namespace Tech.Aerove.Blazor.DataTables.Components
 {
@@ -15,10 +14,6 @@ namespace Tech.Aerove.Blazor.DataTables.Components
         /// </summary>
         [CascadingParameter] private TableNetwork Network { get; set; } = null!;
 
-        [CascadingParameter]
-        private ColumnInfoModel Model { get; set; } = null!;
-
-
         [Parameter(CaptureUnmatchedValues = true)]
         public Dictionary<string, object> InputAttributes { get; set; } = new Dictionary<string, object>();
 
@@ -28,26 +23,26 @@ namespace Tech.Aerove.Blazor.DataTables.Components
         [Parameter]
         public RenderFragment? ChildContent { get; set; }//inner content created by user
 
+        private ColumnInfoModel? Model { get; set; }
+
         private bool Render = false;
         private OrderableDirection Direction = OrderableDirection.None;
 
         protected override void OnParametersSet()
         {
-            if (Model.Orderable)
+            //Random rand = new Random();
+            //Thread.Sleep(rand.Next(1000, 5000));
+            Console.WriteLine(Name);
+            if (Model == null && Name != null)
+            {
+                Model = Network.Columns.Single(x => x.Name == Name);
+            }
+            if (Model != null && Model.Orderable)
             {
                 InputAttributes.AddStyleClass("orderable");
                 SetOrderClass(Direction.GetClass());
-            }
-        }
-
-        protected override void OnInitialized()
-        {
-            if (Name == Model.Name || Name == null)
-            {
-                Render = true;
                 Network.TableData.OnOrderReset += OnOrderReset;
             }
-            base.OnInitialized();
         }
 
         public void OnOrderReset(object? sender, EventArgs args)
@@ -58,6 +53,11 @@ namespace Tech.Aerove.Blazor.DataTables.Components
 
         private async Task ChangeDirectionAsync(MouseEventArgs args)
         {
+            if(Model is null)
+            {
+                return;
+            }
+
             var currentDirection = Direction;
 
             if (args.ShiftKey == false)
@@ -83,14 +83,17 @@ namespace Tech.Aerove.Blazor.DataTables.Components
                 Network.TableData.OrderableCommands.Add(new OrderCommand(Model.Name, Direction));
             }
 
-            await Network.TableData?.UpdateAsync();
+            if (Network.TableData.UpdateAsync is not null)
+            {
+                await Network.TableData.UpdateAsync();
+            }
+
         }
         private void SetOrderClass(string orderClass)
         {
             InputAttributes.RemoveStyleClass("asc");
             InputAttributes.RemoveStyleClass("desc");
             InputAttributes.AddStyleClass(orderClass);
-
         }
         public void Dispose()
         {

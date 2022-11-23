@@ -64,7 +64,7 @@ namespace Tech.Aerove.Blazor.DataTables.Models
             }
 
             var columnAttribute = PropertyInfo.GetCustomAttribute<DataSearchAttribute>();
-            if (columnAttribute != null && columnAttribute.Mode != null)
+            if (columnAttribute != null)
             {
                 searchable = columnAttribute.Mode;
             }
@@ -84,7 +84,7 @@ namespace Tech.Aerove.Blazor.DataTables.Models
             }
 
             var columnAttribute = PropertyInfo.GetCustomAttribute<DataOrderableAttribute>();
-            if (columnAttribute != null && columnAttribute.Orderable != null)
+            if (columnAttribute != null)
             {
                 orderable = columnAttribute.Orderable;
             }
@@ -104,7 +104,7 @@ namespace Tech.Aerove.Blazor.DataTables.Models
             }
 
             var columnAttribute = PropertyInfo.GetCustomAttribute<DataRenderAttribute>();
-            if (columnAttribute != null && columnAttribute.Render != null)
+            if (columnAttribute != null)
             {
                 renderable = columnAttribute.Render;
             }
@@ -124,7 +124,7 @@ namespace Tech.Aerove.Blazor.DataTables.Models
             }
 
             var columnAttribute = PropertyInfo.GetCustomAttribute<DataFilterableAttribute>();
-            if (columnAttribute != null && columnAttribute.Filterable != null)
+            if (columnAttribute != null)
             {
                 filterable = columnAttribute.Filterable;
             }

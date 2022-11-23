@@ -18,7 +18,7 @@ namespace Tech.Aerove.Blazor.DataTables.Components
         /// <summary>
         /// The Table Head render template. If not specified no table heade will be generated
         /// </summary>
-        [Parameter] public RenderFragment<TemplateTableHeadModel<TItem>>? TableHead { get; set; }
+        [Parameter] public RenderFragment? TableHead { get; set; }
 
         /// <summary>
         /// The Table Body render template. If not specified no table heade will be generated
@@ -152,7 +152,10 @@ namespace Tech.Aerove.Blazor.DataTables.Components
             }
         }
 
-
+        protected override void OnAfterRender(bool firstRender)
+        {
+            Console.WriteLine("Complete");
+        }
         public void Dispose()
         {
             if (DataSource != null)
