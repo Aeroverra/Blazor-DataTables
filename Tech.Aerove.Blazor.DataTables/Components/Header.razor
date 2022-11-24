@@ -3,7 +3,7 @@
 
 @if (ColumnModel != null && ColumnModel.OrderableDirection != OrderableDirection.Disabled)
 {
-    <th scope="col" class="orderable @ColumnModel.OrderableDirection.GetClass()" @attributes="InputAttributes" @onclick="ChangeDirectionAsync">
+    <th scope="col"  @attributes="InputAttributes" @onclick="ChangeDirectionAsync">
         @if (ChildContent is not null)
         {
             @ChildContent

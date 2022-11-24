@@ -10,8 +10,8 @@ namespace Tech.Aerove.Blazor.DataTables.Context
     public abstract class TableContext<TItem> : ITableContext
     {
         internal readonly Engine<TItem> Engine;
-        internal readonly UIConfig UIConfig;
-        internal readonly RunningConfig RunningConfig;
+        internal readonly UIConfig UIConfig = new UIConfig();
+        internal readonly RunningConfig RunningConfig = new RunningConfig();
 
         IEngine ITableContext.Engine => Engine;
         UIConfig ITableContext.UIConfig => UIConfig;
@@ -20,8 +20,6 @@ namespace Tech.Aerove.Blazor.DataTables.Context
         public TableContext()
         {
             Engine = new Engine<TItem>(this);
-            UIConfig = new UIConfig();
-            RunningConfig = new RunningConfig();
         }
 
         protected abstract Task<IQueryable<TItem>> OnStartQueryAsync();

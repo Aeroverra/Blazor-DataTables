@@ -8,7 +8,7 @@ namespace Tech.Aerove.Blazor.DataTables.Components
     /// Main Component which handles the initial instantiation of the sub components and shared data
     /// </summary>
     /// <typeparam name="TItem">The Object type to be queried</typeparam>
-    public partial class DataTable<TItem> : ComponentBase
+    public partial class DataTable<TItem> : ComponentBase, IDisposable
     {
         /// <summary>
         /// The Table Head render template. If not specified no table heade will be generated
@@ -30,10 +30,20 @@ namespace Tech.Aerove.Blazor.DataTables.Components
         /// </summary>
         [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? InputAttributes { get; set; } = new Dictionary<string, object>();
 
-
         protected override Task OnInitializedAsync()
         {
+            TableContext.Engine.OnAfterUpdate += OnAfterUpdateAsync;
             return TableContext.Engine.UpdateAsync();
+        }
+
+        public async Task OnAfterUpdateAsync()
+        {
+            await InvokeAsync(() => StateHasChanged());
+        }
+
+        public void Dispose()
+        {
+            TableContext.Engine.OnAfterUpdate -= OnAfterUpdateAsync;
         }
 
     }
