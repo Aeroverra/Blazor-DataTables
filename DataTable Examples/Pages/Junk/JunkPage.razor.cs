@@ -12,5 +12,9 @@ namespace DataTable_Examples.Pages.Junk
             Source = new JunkSource();
             return Task.CompletedTask;
         }
+        protected override void OnAfterRender(bool firstRender)
+        {
+            Console.WriteLine("Complete22222");
+        }
     }
 }

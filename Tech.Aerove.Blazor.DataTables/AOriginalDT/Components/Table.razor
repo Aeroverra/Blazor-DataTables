@@ -1,0 +1,31 @@
+﻿@using Tech.Aerove.Blazor.DataTables.AOriginalDT.Models
+@using Tech.Aerove.Blazor.DataTables.AOriginalDT.Attributes
+@using Tech.Aerove.Blazor.DataTables.AOriginalDT.Components
+@using Tech.Aerove.Blazor.DataTables.AOriginalDT.Extensions
+@using Tech.Aerove.Blazor.DataTables.AOriginalDT.Models.Enums;
+@typeparam TItem
+@inherits ComponentBase
+<div class="@(Network.InputAttributes.HasStyleClass("table-responsive")?"table-responsive":"")">
+    <table @attributes="Network.InputAttributes">
+        <thead>
+            <tr>
+                @if (TableHead is not null)
+                {
+                    @TableHead
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Network.Items)
+            {
+                if (TableBody is not null)
+                {
+                    var param = new TemplateTableBodyModel<TItem>(Network.Items, item);
+                    <tr>
+                        @TableBody(param)
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

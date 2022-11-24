@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Tech.Aerove.Blazor.DataTables.Attributes;
-using Tech.Aerove.Blazor.DataTables.Models;
-using Tech.Aerove.Blazor.DataTables.Models.Enums;
+using Tech.Aerove.Blazor.DataTables.AOriginalDT.Attributes;
+using Tech.Aerove.Blazor.DataTables.AOriginalDT.Models.Enums;
 
 namespace DataTable_Examples.Pages.Junk
 {

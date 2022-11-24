@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Tech.Aerove.Blazor.DataTables.Models;
 
 namespace DataTable_Examples.Pages.Users
 {

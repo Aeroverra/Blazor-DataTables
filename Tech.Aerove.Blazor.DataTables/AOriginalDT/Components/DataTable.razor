@@ -1,0 +1,17 @@
+﻿@using Tech.Aerove.Blazor.DataTables.AOriginalDT.Models
+@using Tech.Aerove.Blazor.DataTables.AOriginalDT.Attributes
+@using Tech.Aerove.Blazor.DataTables.AOriginalDT.Components
+@using Tech.Aerove.Blazor.DataTables.AOriginalDT.Extensions
+@using Tech.Aerove.Blazor.DataTables.AOriginalDT.Models.Enums;
+@typeparam TItem
+@inherits ComponentBase
+
+<CascadingValue Value="Network">
+
+    <TableTop TItem="TItem" />
+
+    <Table TItem="TItem" TableHead="TableHead!" TableBody="TableBody!" />
+
+    <TableBottom TItem="TItem" />
+
+</CascadingValue>

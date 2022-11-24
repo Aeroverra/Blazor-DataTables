@@ -3,7 +3,7 @@ using DataTable_Examples.Pages.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
-using Tech.Aerove.Blazor.DataTables.Models;
+using Tech.Aerove.Blazor.DataTables.AOriginalDT.Models.Abstracts;
 
 namespace DataTable_Examples.Pages.Junk
 {

@@ -1,0 +1,29 @@
+﻿@typeparam TItem
+@inherits ComponentBase
+
+<div class="row">
+    <div class="col-3 col-sm-6">
+        @if (UIConfig.EnableLengthDropdown)
+        {
+            <div class="dataTables_length">
+                <label class="form-label">
+                    <select class="form-control form-control-sm form-select form-select-sm" @onchange="OnLengthChangeAsync">
+                        @foreach (var length in UIConfig.Lengths)
+                        {
+                            <option value="@length" selected="@(RunningConfig.Length == length)">@length</option>
+                        }
+                    </select>
+                </label>
+            </div>
+        }
+    </div>
+    <div class="col-9 col-sm-6 text-end">
+        @if (UIConfig.EnableSearchBar)
+        {
+            <label>
+                Search:
+                <input type="search" class="form-control form-control-sm" placeholder="" @bind="RunningConfig.SearchText" @oninput="OnSearchChange">
+            </label>
+        }
+    </div>
+</div>

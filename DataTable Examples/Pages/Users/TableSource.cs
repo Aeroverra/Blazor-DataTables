@@ -2,7 +2,7 @@
 using DataTable_Examples.Pages.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Tech.Aerove.Blazor.DataTables.Models;
+using Tech.Aerove.Blazor.DataTables.AOriginalDT.Models.Abstracts;
 
 namespace DataTable_Examples.Pages.Users
 {
@@ -32,7 +32,6 @@ namespace DataTable_Examples.Pages.Users
         public override IQueryable GetQuery()
         {
             Context = _databaseFactory.CreateDbContext();
-
             var query = Context.Users;
 
             return query;

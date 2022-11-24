@@ -1,13 +1,9 @@
-﻿@using System.Diagnostics.CodeAnalysis
-@typeparam TItem
+﻿@typeparam TItem
 @inherits ComponentBase
 
-<CascadingValue Value="Network">
+<CascadingValue Value="TableContext">
 
-    <TableTop TItem="TItem" />
-
-    <Table TItem="TItem" TableHead="TableHead!" TableBody="TableBody!" />
-
-    <TableBottom TItem="TItem" />
+    <Top TItem="TItem" />
+    <Table TItem="TItem" TableHead="TableHead!" TableBody="TableBody!" InputAttributes="InputAttributes" />
 
 </CascadingValue>

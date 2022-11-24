@@ -1,18 +1,18 @@
 ﻿@page "/Users/UsersPage"
 @inherits ComponentBase
-@using Tech.Aerove.Blazor.DataTables.Components
+@using Tech.Aerove.Blazor.DataTables.AOriginalDT.Components
 
 <h3>UsersPage</h3>
 
-    <DataTable DataSource="Source" Context="Data" class="table table-sm dt-responsive nowrap w-100">
-        <TableHead>
-            <Header class="table-active"></Header>
-        </TableHead>
-        <TableBody>
-
-            <Column>
-            
-            </Column>
-
-        </TableBody>
-    </DataTable>
+<DataTable DataSource="Source" Context="Data" class="table table-sm dt-responsive nowrap w-100">
+    <TableHead>
+        <Header Name="@nameof(TableUser.Id)" class="table-active"></Header>
+        <Header Name="@nameof(TableUser.Email)" class="table-active"></Header>
+        <Header Name="@nameof(TableUser.PasswordHash)" class="table-active"></Header>
+    </TableHead>
+    <TableBody>
+        <Column scope="row" class=""> @Data.Item.Id</Column>
+        <Column>@Data.Item.Email</Column>
+        <Column>@Data.Item.PasswordHash</Column>
+    </TableBody>
+</DataTable> 

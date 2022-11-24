@@ -1,8 +1,9 @@
-﻿@inherits ComponentBase
+﻿@using Tech.Aerove.Blazor.DataTables.Enums
+@inherits ComponentBase
 
-@if (Model != null && Model.Orderable)
+@if (ColumnModel != null && ColumnModel.OrderableDirection != OrderableDirection.Disabled)
 {
-    <th scope="col" class="orderable @Direction.GetClass()" @attributes="InputAttributes" @onclick="ChangeDirectionAsync">
+    <th scope="col" class="orderable @ColumnModel.OrderableDirection.GetClass()" @attributes="InputAttributes" @onclick="ChangeDirectionAsync">
         @if (ChildContent is not null)
         {
             @ChildContent
@@ -26,4 +27,3 @@ else
         }
     </th>
 }
-

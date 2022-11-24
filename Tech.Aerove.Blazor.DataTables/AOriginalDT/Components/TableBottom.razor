@@ -1,0 +1,41 @@
+﻿@using Tech.Aerove.Blazor.DataTables.AOriginalDT.Models
+@using Tech.Aerove.Blazor.DataTables.AOriginalDT.Attributes
+@using Tech.Aerove.Blazor.DataTables.AOriginalDT.Components
+@using Tech.Aerove.Blazor.DataTables.AOriginalDT.Extensions
+@using Tech.Aerove.Blazor.DataTables.AOriginalDT.Models.Enums;
+@typeparam TItem
+@inherits ComponentBase
+<div class="row table-bottom">
+    <div class="col-12 col-md-5">
+        <div class="result-descriptor">
+            @Network.TableData.GetResultdescriptor()
+        </div>
+    </div>
+    <div class="col-12 col-md-7">
+        <ul class="page-list">
+            <li class="page-li first @(Network.TableData.Page==1?"disabled":"")">
+                <span href="" class="page-button" @onclick="Network.TableData.SetPageFirstAsync" @onclick:preventDefault>
+                    First
+                </span>
+            </li>
+            <li class="page-li left @(Network.TableData.Page==1?"disabled":"")">
+                <span href="" class="page-button" @onclick="Network.TableData.SetPagePreviousAsync" @onclick:preventDefault>
+                    &lt;
+                </span>
+            </li>
+            <li class="page-li active">
+                <span href="" class="page-button" @onclick:preventDefault>@Network.TableData.Page</span>
+            </li>
+            <li class="page-li right @(Network.TableData.Page==Network.TableData.TotalPages?"disabled":"")">
+                <span href="" class="page-button" @onclick="Network.TableData.SetPageNextAsync" @onclick:preventDefault>
+                    >
+                </span>
+            </li>
+            <li class="page-li last @(Network.TableData.Page==Network.TableData.TotalPages?"disabled":"")">
+                <span href="" class="page-button" @onclick="Network.TableData.SetPageLastAsync" @onclick:preventDefault>
+                    Last
+                </span>
+            </li>
+        </ul>
+    </div>
+</div>
