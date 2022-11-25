@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tech.Aerove.Blazor.DataTables.Enums
 {
-    internal enum OrderableDirection
+    public enum OrderableDirection
     {
         Disabled,
         None,

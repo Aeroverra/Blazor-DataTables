@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Tech.Aerove.Blazor.DataTables.Configs;
 using Tech.Aerove.Blazor.DataTables.Context;
 using Tech.Aerove.Blazor.DataTables.Models;
 

@@ -1,5 +1,6 @@
-﻿using Tech.Aerove.Blazor.DataTables.Context;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+﻿using Tech.Aerove.Blazor.DataTables.Configs;
+using Tech.Aerove.Blazor.DataTables.Context;
+using Tech.Aerove.Blazor.DataTables.Enums;
 
 namespace DataTable_Examples.Pages.Junk
 {
@@ -18,6 +19,15 @@ namespace DataTable_Examples.Pages.Junk
         protected override Task<IQueryable<JunkModel>> OnBeforeFinishQueryAsync(IQueryable<JunkModel> query)
         {
             return Task.FromResult(query);
+        }
+
+        protected override void OnConfiguring(InitialConfig config)
+        {
+            config.DefaultOrderable = true;
+            config.Column<JunkModel>(x => x.Email)
+                .SearchMode(SearchMode.Exact);
+                //.Filterable(true)
+                //.Filters(new string[] { "no-reply@autobuy.io" }.ToList());
         }
 
         protected override Task<IQueryable<JunkModel>> OnStartQueryAsync()

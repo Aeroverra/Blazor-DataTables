@@ -10,9 +10,15 @@ using Tech.Aerove.Blazor.DataTables.Models;
 
 namespace Tech.Aerove.Blazor.DataTables.Context
 {
+
+    /// <summary>
+    /// Handles all the dynamic Linq queries 
+    /// </summary>
     internal static class QueryEngine
     {
-
+        /// <summary>
+        /// Async Counts the amount of entities if available and if not does a synchronous count
+        /// </summary>
         internal static Task<int> CountAsync<TItem>(this IQueryable<TItem> query)
         {
             if (query is IAsyncQueryProvider)
@@ -25,6 +31,9 @@ namespace Tech.Aerove.Blazor.DataTables.Context
             }
         }
 
+        /// <summary>
+        /// Adds a search expression to the given Queryable and returns the result
+        /// </summary>
         internal static IQueryable<TItem> Search<TItem>(this IQueryable<TItem> query, List<ColumnModel> Columns, string searchText)
         {
             //WARNING: This uses params to prevent SQL Injection!
@@ -49,10 +58,28 @@ namespace Tech.Aerove.Blazor.DataTables.Context
             return query;
         }
 
-        internal static Task<IQueryable<TItem>> FilterAsync<TItem>(this IQueryable<TItem> query)
+        /// <summary>
+        /// Adds filter expressions to the given Queryable and returns the result
+        /// </summary>
+        internal static IQueryable<TItem> Filter<TItem>(this IQueryable<TItem> query, List<ColumnModel> columns)
         {
-            throw new NotImplementedException();
+            //WARNING: This uses params to prevent SQL Injection!
+            foreach (var column in columns.Where(x=>x.Filterable).Where(x => x.Filters.Any()))
+            {
+                List<string> searchStrings = new List<string>();
+                for (var x = 0; x < column.Filters.Count(); x++)
+                {
+                    searchStrings.Add($"{column.Name} == @{x}");
+                }
+                query = query.Where(string.Join(" || ", searchStrings), column.Filters.ToArray());
+
+            }
+            return query;
         }
+
+        /// <summary>
+        /// adds an order expression to the given Queryable and returns the result
+        /// </summary>
         internal static IQueryable<TItem> Order<TItem>(this IQueryable<TItem> query, List<ColumnModel> columns)
         {
             if (columns.Count() == 0) { return query; }
@@ -72,6 +99,9 @@ namespace Tech.Aerove.Blazor.DataTables.Context
             return query;
         }
 
+        /// <summary>
+        /// Gets Async List if available and if not gets a synchronous List
+        /// </summary>
         internal static Task<List<TItem>> FinishQueryAsync<TItem>(this IQueryable<TItem> query)
         {
             if (query is IAsyncQueryProvider)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Tech.Aerove.Blazor.DataTables.Configs;
 using Tech.Aerove.Blazor.DataTables.Context;
 using Tech.Aerove.Blazor.DataTables.Enums;
 using Tech.Aerove.Blazor.DataTables.Extensions;
@@ -67,6 +68,12 @@ namespace Tech.Aerove.Blazor.DataTables.Components
                 }
                 //clear ordered list
                 RunningConfig.ColumnsOrdered.Clear();
+            }
+            else
+            {
+                //shift is held down so if this column is already in the orderables remove
+                //it so we don't make a duplicate
+                RunningConfig.ColumnsOrdered.RemoveAll(x => x == ColumnModel);
             }
             switch (ColumnModel!.OrderableDirection)
             {
