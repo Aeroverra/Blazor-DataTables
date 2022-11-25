@@ -24,6 +24,7 @@ namespace DataTable_Examples.Pages.Junk
         protected override void OnConfiguring(InitialConfig config)
         {
             config.DefaultOrderable = true;
+            config.DefaultFilterable = true;
             config.Column<JunkModel>(x => x.Email)
                 .SearchMode(SearchMode.Exact);
                 //.Filterable(true)

@@ -111,7 +111,8 @@ namespace Tech.Aerove.Blazor.DataTables.Context
                 var column = new ColumnModel(property.Name)
                 {
                     OrderableDirection = initialConfig.DefaultOrderable == false ? OrderableDirection.Disabled : OrderableDirection.None,
-                    SearchMode = initialConfig.DefaultSearchMode
+                    SearchMode = initialConfig.DefaultSearchMode,
+                    Filterable = initialConfig.DefaultFilterable
                 };
                 RunningConfig.Columns.Add(column);
             }
@@ -123,7 +124,8 @@ namespace Tech.Aerove.Blazor.DataTables.Context
                 var column = new ColumnModel(field.Name)
                 {
                     OrderableDirection = initialConfig.DefaultOrderable == false ? OrderableDirection.Disabled : OrderableDirection.None,
-                    SearchMode = initialConfig.DefaultSearchMode
+                    SearchMode = initialConfig.DefaultSearchMode,
+                    Filterable = initialConfig.DefaultFilterable
                 };
                 RunningConfig.Columns.Add(column);
             }

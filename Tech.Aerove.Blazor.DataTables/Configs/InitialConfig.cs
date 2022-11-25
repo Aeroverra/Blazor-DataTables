@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Collections.Generic;
@@ -13,12 +13,21 @@ using Tech.Aerove.Blazor.DataTables.Models;
 
 namespace Tech.Aerove.Blazor.DataTables.Configs
 {
+    /// <summary>
+    /// Initial start up config
+    /// Used to set defaults and override defaults on a per column basis
+    /// </summary>
     public class InitialConfig : ICloneable
     {
         /// <summary>
         /// Whether a column will be orderable by default
         /// </summary>
         public bool DefaultOrderable = false;
+
+        /// <summary>
+        /// Whether a column will be filterable by default
+        /// </summary>
+        public bool DefaultFilterable = false;
 
         /// <summary>
         /// Whether a column will be searchable by default

@@ -43,15 +43,43 @@ namespace Tech.Aerove.Blazor.DataTables.Context
                 List<object> searchParams = new List<object>() { searchText };
                 foreach (var column in Columns.Where(x => x.SearchMode != SearchMode.Disabled))
                 {
-                    var param = "@0";
-                    if (column.SearchMode == SearchMode.Exact)
-                    {
-                        searchStrings.Add($"{column.Name} == {param}");
-                    }
-                    else
-                    {
-                        searchStrings.Add($"{column.Name}.Contains({param})");
-                    }
+                    //Type needs to be added to use this
+                    //if (column.Type.IsEnum)
+                    //{
+                    //    var enumNames = column.Type.GetEnumNames();
+                    //    var enumResults = new List<int>();
+                    //    if (column.SearchMode == SearchMode.Exact)
+                    //    {
+                    //        enumResults = enumNames
+                    //           .Where(x => x.ToLower() == Network.TableData.SearchInput.ToLower())
+                    //           .Select(x => (int)Enum.Parse(column.Type, x))
+                    //           .ToList();
+                    //    }
+                    //    else
+                    //    {
+                    //        enumResults = enumNames
+                    //            .Where(x => x.ToLower().Contains(Network.TableData.SearchInput.ToLower()))
+                    //            .Select(x => (int)Enum.Parse(column.Type, x))
+                    //            .ToList();
+                    //    }
+
+                    //    foreach (var enumResult in enumResults)
+                    //    {
+                    //        searchStrings.Add($"{column.Name} == {enumResult}");
+                    //    }
+                    //}
+                    //else
+                    //{
+                        var param = "@0";
+                        if (column.SearchMode == SearchMode.Exact)
+                        {
+                            searchStrings.Add($"{column.Name} == {param}");
+                        }
+                        else
+                        {
+                            searchStrings.Add($"{column.Name}.Contains({param})");
+                        }
+                    //}
                 }
                 query = query.Where(string.Join(" || ", searchStrings), searchParams.ToArray());
             }
