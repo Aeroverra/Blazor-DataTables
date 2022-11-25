@@ -32,8 +32,9 @@ namespace Tech.Aerove.Blazor.DataTables.Components
 
         protected override Task OnInitializedAsync()
         {
-            TableContext.Engine.OnAfterUpdate += OnAfterUpdateAsync;
-            return TableContext.Engine.UpdateAsync();
+          
+            TableContext.Api.OnAfterUpdate += OnAfterUpdateAsync;
+            return TableContext.Api.UpdateAsync();
         }
 
         public async Task OnAfterUpdateAsync()
@@ -43,7 +44,7 @@ namespace Tech.Aerove.Blazor.DataTables.Components
 
         public void Dispose()
         {
-            TableContext.Engine.OnAfterUpdate -= OnAfterUpdateAsync;
+            TableContext.Api.OnAfterUpdate -= OnAfterUpdateAsync;
         }
 
     }

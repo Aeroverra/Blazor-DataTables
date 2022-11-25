@@ -8,25 +8,25 @@
     </div>
     <div class="col-12 col-md-7">
         <ul class="page-list">
-            <li class="page-li first @(RunningConfig.Page==1?"disabled":"")">
+            <li class="page-li first @(Api.Page==1?"disabled":"")">
                 <span href="" class="page-button" @onclick="SetPageFirstAsync" @onclick:preventDefault>
                     First
                 </span>
             </li>
-            <li class="page-li left @(RunningConfig.Page==1?"disabled":"")">
+            <li class="page-li left @(Api.Page==1?"disabled":"")">
                 <span href="" class="page-button" @onclick="SetPagePreviousAsync" @onclick:preventDefault>
                     &lt;
                 </span>
             </li>
             <li class="page-li active">
-                <span href="" class="page-button" @onclick:preventDefault>@RunningConfig.Page</span>
+                <span href="" class="page-button" @onclick:preventDefault>@Api.Page</span>
             </li>
-            <li class="page-li right @(RunningConfig.Page==RunningConfig.TotalPages?"disabled":"")">
+            <li class="page-li right @(Api.Page==Api.TotalPages?"disabled":"")">
                 <span href="" class="page-button" @onclick="SetPageNextAsync" @onclick:preventDefault>
                     >
                 </span>
             </li>
-            <li class="page-li last @(RunningConfig.Page==RunningConfig.TotalPages?"disabled":"")">
+            <li class="page-li last @(Api.Page==Api.TotalPages?"disabled":"")">
                 <span href="" class="page-button" @onclick="SetPageLastAsync" @onclick:preventDefault>
                     Last
                 </span>

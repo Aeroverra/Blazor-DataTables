@@ -12,7 +12,7 @@ namespace Tech.Aerove.Blazor.DataTables.Context
     /// Used specifically to allow passing the context without a type parameter to
     /// prevent the user from needing to specify the item type in multiple places
     /// </summary>
-    internal interface ITableContext
+    public interface ITableContext
     {
         /// <summary>
         /// The central data processing location which handles the setup
@@ -23,7 +23,7 @@ namespace Tech.Aerove.Blazor.DataTables.Context
         /// <summary>
         /// The api allowing control over table operations
         /// </summary>
-        internal ITableController Api { get; }
+        internal TableController TableController { get; }
 
         /// <summary>
         /// Configuration specific to the ui

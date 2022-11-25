@@ -26,6 +26,11 @@ namespace Tech.Aerove.Blazor.DataTables.Configs
         public SearchMode DefaultSearchMode = SearchMode.Disabled;
 
         /// <summary>
+        /// The maximum amount of records which can be queried
+        /// </summary>
+        public int MaxLength = 100;
+
+        /// <summary>
         /// Enables the length dropdown menu
         /// </summary>
         public bool UIEnableLengthDropdown = true;

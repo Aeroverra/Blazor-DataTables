@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Tech.Aerove.Blazor.DataTables.Api;
 using Tech.Aerove.Blazor.DataTables.Configs;
 using Tech.Aerove.Blazor.DataTables.Context;
 using Tech.Aerove.Blazor.DataTables.Enums;
@@ -21,6 +22,7 @@ namespace Tech.Aerove.Blazor.DataTables.Components
         private UIConfig UIConfig => Context.UIConfig;
         private RunningConfig RunningConfig => Context.RunningConfig;
         private IEngine Engine => Context.Engine;
+        private TableController Api => Context.TableController;
 
         [Parameter(CaptureUnmatchedValues = true)]
         public Dictionary<string, object> InputAttributes { get; set; } = new Dictionary<string, object>();
@@ -35,12 +37,9 @@ namespace Tech.Aerove.Blazor.DataTables.Components
 
         protected override void OnParametersSet()
         {
-            //Random rand = new Random();
-            //Thread.Sleep(rand.Next(1000, 5000));
-            Console.WriteLine(Name);
             if (ColumnModel == null && Name != null)
             {
-                ColumnModel = RunningConfig.Columns.FirstOrDefault(x => x.Name == Name);
+                ColumnModel = Api.GetColumn(Name);
             }
             if (ColumnModel != null && ColumnModel.OrderableDirection != OrderableDirection.Disabled)
             {
@@ -53,37 +52,8 @@ namespace Tech.Aerove.Blazor.DataTables.Components
         }
         private async Task ChangeDirectionAsync(MouseEventArgs args)
         {
-            if (args.ShiftKey == false)
-            {
-                //Get all columns enabled except this one
-                var columns = RunningConfig.Columns
-                    .Where(x => x.OrderableDirection != OrderableDirection.Disabled)
-                    .Where(x => x != ColumnModel)
-                    .ToList();
-
-                //reset direction
-                foreach (var column in columns)
-                {
-                    column.OrderableDirection = OrderableDirection.None;
-                }
-                //clear ordered list
-                RunningConfig.ColumnsOrdered.Clear();
-            }
-            else
-            {
-                //shift is held down so if this column is already in the orderables remove
-                //it so we don't make a duplicate
-                RunningConfig.ColumnsOrdered.RemoveAll(x => x == ColumnModel);
-            }
-            switch (ColumnModel!.OrderableDirection)
-            {
-                case OrderableDirection.None: ColumnModel.OrderableDirection = OrderableDirection.Ascending; break;
-                case OrderableDirection.Ascending: ColumnModel.OrderableDirection = OrderableDirection.Descending; break;
-                case OrderableDirection.Descending: ColumnModel.OrderableDirection = OrderableDirection.None; break;
-            }
-            RunningConfig.ColumnsOrdered.Add(ColumnModel);
-
-            await Engine.UpdateAsync();
+            Api.SwapOrder(ColumnModel!, args.ShiftKey);
+            await Api.UpdateAsync();
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Tech.Aerove.Blazor.DataTables.Api;
 using Tech.Aerove.Blazor.DataTables.Configs;
 using Tech.Aerove.Blazor.DataTables.Context;
 
@@ -14,9 +15,7 @@ namespace Tech.Aerove.Blazor.DataTables.Components
     {
         [CascadingParameter] internal TableContext<TItem> Context { get; set; } = null!;
         private UIConfig UIConfig => Context.UIConfig;
-        private RunningConfig RunningConfig => Context.RunningConfig;
-        private Engine<TItem> Engine => Context.Engine;
-
+        private TableController Api => Context.Api;
 
         /// <summary>
         /// Called when the user changes the length via the selectlist
@@ -30,8 +29,8 @@ namespace Tech.Aerove.Blazor.DataTables.Components
             {
                 return;
             }
-            RunningConfig.Length = value;
-            await Engine.UpdateAsync();
+            Api.Length = value;
+            await Api.UpdateAsync();
         }
 
         /// <summary>
@@ -39,8 +38,8 @@ namespace Tech.Aerove.Blazor.DataTables.Components
         /// </summary>
         private async Task OnSearchChange(ChangeEventArgs args)
         {
-            RunningConfig.SearchText = $"{args.Value}";
-            await Engine.UpdateAsync();
+            Api.SearchText = $"{args.Value}";
+            await Api.UpdateAsync();
 
         }
     }

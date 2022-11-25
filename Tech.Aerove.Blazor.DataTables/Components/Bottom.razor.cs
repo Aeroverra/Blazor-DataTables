@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Tech.Aerove.Blazor.DataTables.Api;
 using Tech.Aerove.Blazor.DataTables.Configs;
 using Tech.Aerove.Blazor.DataTables.Context;
 
@@ -16,46 +17,51 @@ namespace Tech.Aerove.Blazor.DataTables.Components
         private UIConfig UIConfig => Context.UIConfig;
         private RunningConfig RunningConfig => Context.RunningConfig;
         private Engine<TItem> Engine => Context.Engine;
+        private TableController Api => Context.Api;
 
 
         private string GetResultdescriptor()
         {
-            var to = RunningConfig.Start + RunningConfig.Length;
-            if (RunningConfig.RecordsFiltered < to)
+            var to = Api.Start + Api.Length;
+            if (Api.RecordsFiltered < to)
             {
-                to = RunningConfig.RecordsFiltered;
+                to = Api.RecordsFiltered;
             }
-            var descriptor = $"Showing {RunningConfig.Start + 1} to {to} of {RunningConfig.RecordsFiltered} entries";
-            if (RunningConfig.RecordsFiltered != RunningConfig.RecordsTotal)
+            var start = Api.Start + 1; 
+            if(Api.RecordsFiltered == 0)
             {
-                descriptor += $"(filtered from {RunningConfig.RecordsTotal} total entries)";
+                start = 0;
+            }
+            var descriptor = $"Showing {start} to {to} of {Api.RecordsFiltered} entries";
+            if (Api.RecordsFiltered != Api.RecordsTotal)
+            {
+                descriptor += $" (filtered from {Api.RecordsTotal} total entries)";
             }
             return descriptor;
         }
-        internal async Task SetPageAsync(int page)
+
+        internal  Task SetPageNextAsync()
         {
-            RunningConfig.Page = page;
-            RunningConfig.Start = (RunningConfig.Page - 1) * RunningConfig.Length;
-            await Engine.UpdateAsync();
-        }
-        internal Task SetPageNextAsync()
-        {
-            return SetPageAsync(RunningConfig.Page + 1);
+            Api.SetPageNext();
+            return Api.UpdateAsync();
         }
 
         internal Task SetPagePreviousAsync()
         {
-            return SetPageAsync(RunningConfig.Page - 1);
+            Api.SetPagePrevious();
+            return Api.UpdateAsync();
         }
 
         internal Task SetPageFirstAsync()
         {
-            return SetPageAsync(1);
+            Api.SetPageFirst();
+            return Api.UpdateAsync();
         }
 
         internal Task SetPageLastAsync()
         {
-            return SetPageAsync(RunningConfig.TotalPages);
+            Api.SetPageLast();
+            return Api.UpdateAsync();
         }
     }
 }

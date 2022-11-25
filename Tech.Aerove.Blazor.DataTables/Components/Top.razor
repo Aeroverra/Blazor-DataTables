@@ -10,7 +10,7 @@
                     <select class="form-control form-control-sm form-select form-select-sm" @onchange="OnLengthChangeAsync">
                         @foreach (var length in UIConfig.Lengths)
                         {
-                            <option value="@length" selected="@(RunningConfig.Length == length)">@length</option>
+                            <option value="@length" selected="@(Api.Length == length)">@length</option>
                         }
                     </select>
                 </label>
@@ -22,7 +22,7 @@
         {
             <label>
                 Search:
-                <input type="search" class="form-control form-control-sm" placeholder="" @bind="RunningConfig.SearchText" @oninput="OnSearchChange">
+                <input type="search" class="form-control form-control-sm" placeholder="" @bind="Api.SearchText" @oninput="OnSearchChange">
             </label>
         }
     </div>

@@ -23,12 +23,6 @@ namespace Tech.Aerove.Blazor.DataTables.Context
         private RunningConfig RunningConfig => Context.RunningConfig;
 
         /// <summary>
-        /// Tell listeners we have fresh data. The datatable component uses
-        /// this to call statehaschanged and update the ui
-        /// </summary>
-        public event Func<Task> OnAfterUpdate = null!;
-
-        /// <summary>
         /// The raw queried data
         /// </summary>
         internal List<TItem> Items = new List<TItem>();
@@ -43,9 +37,7 @@ namespace Tech.Aerove.Blazor.DataTables.Context
         private SemaphoreSlim QueryLock = new SemaphoreSlim(1);
 
         /// <summary>
-        /// Updates the Items then calls the event handler OnAfterUpdate
-        /// To tell the listeners
-        /// The Datatable component is a listener and calls Statehaschanged to update the ui
+        /// Updates the Items 
         /// </summary>
         public async Task UpdateAsync()
         {
@@ -85,10 +77,6 @@ namespace Tech.Aerove.Blazor.DataTables.Context
                 //disposing a db context
                 await Context.AfterQueryAsync(true);
 
-                //call our event handler so listeners can perform actions
-                //like the datatable component which will call statehaschanged
-                await OnAfterUpdate();
-
             }
             finally
             {
@@ -112,6 +100,9 @@ namespace Tech.Aerove.Blazor.DataTables.Context
 
             //Sets the default values based on the users prefrences
             UIConfig.Setup(initialConfig);
+
+            //set the max length constraint
+            RunningConfig.MaxLength = initialConfig.MaxLength;
 
             //get columns from properties and sets the default values based on the users prefrences
             var properties = typeof(TItem).GetProperties();

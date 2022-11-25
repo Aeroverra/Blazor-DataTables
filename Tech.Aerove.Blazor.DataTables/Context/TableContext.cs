@@ -20,7 +20,7 @@ namespace Tech.Aerove.Blazor.DataTables.Context
         /// <summary>
         /// The api allowing control over table operations
         /// </summary>
-        internal readonly ITableController TableController;
+        public readonly TableController Api;
 
         /// <summary>
         /// Configuration specific to the ui
@@ -36,14 +36,14 @@ namespace Tech.Aerove.Blazor.DataTables.Context
         /// Used internally to catch 
         /// </summary>
         IEngine ITableContext.Engine => Engine;
-        ITableController ITableContext.Api => TableController;
+        TableController ITableContext.TableController => Api;
         UIConfig ITableContext.UIConfig => UIConfig;
         RunningConfig ITableContext.RunningConfig => RunningConfig;
 
         public TableContext()
         {
             Engine = new Engine<TItem>(this);
-            TableController = new TableController<TItem>(this);
+            Api = new TableController(this);
         }
 
         /// <summary>
