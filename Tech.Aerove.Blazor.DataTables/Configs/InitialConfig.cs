@@ -61,6 +61,13 @@ namespace Tech.Aerove.Blazor.DataTables.Configs
         internal List<ColumnOverrideModel> Columns = new List<ColumnOverrideModel>();
 
         /// <summary>
+        /// This will contain any columns to be used for ordering in the order they will apply
+        /// ie: order by name desc then by id asc
+        /// This will contain 0 columns if no columns are being used for ordering
+        /// </summary>
+        internal List<string> ColumnsOrdered = new List<string>();
+
+        /// <summary>
         /// Set the property specific columns
         /// </summary>
         public ColumnBuilder Column<TItem>(Expression<Func<TItem, object>> propertyExpression)

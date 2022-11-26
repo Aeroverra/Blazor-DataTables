@@ -138,6 +138,12 @@ namespace Tech.Aerove.Blazor.DataTables.Context
                 columnOverride.OverrideColumn(column);
             }
 
+            //set the order in which the orderables should be applied
+            foreach(var columnOrder in initialConfig.ColumnsOrdered)
+            {
+                var column = RunningConfig.Columns.Single(x => x.Name == columnOrder);
+                RunningConfig.ColumnsOrdered.Add(column);
+            }
 
         }
 

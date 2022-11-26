@@ -40,6 +40,7 @@ namespace Tech.Aerove.Blazor.DataTables.Configs
         public ColumnBuilder Order(OrderableDirection? orderable)
         {
             Column.OrderableDirection = orderable;
+            Config.ColumnsOrdered.Add(Column.Name);
             return this;
         }
 
