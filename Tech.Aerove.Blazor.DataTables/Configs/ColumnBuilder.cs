@@ -40,7 +40,16 @@ namespace Tech.Aerove.Blazor.DataTables.Configs
         public ColumnBuilder Order(OrderableDirection? orderable)
         {
             Column.OrderableDirection = orderable;
-            Config.ColumnsOrdered.Add(Column.Name);
+            //remove columns already ordered if null
+            if(orderable== null)
+            {
+                Config.ColumnsOrdered.RemoveAll(x => x == Column.Name);
+            }
+            //only add if asc or desc
+            if(orderable != null && orderable != OrderableDirection.None && orderable != OrderableDirection.Disabled)
+            {
+                Config.ColumnsOrdered.Add(Column.Name);
+            }
             return this;
         }
 

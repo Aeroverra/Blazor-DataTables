@@ -70,7 +70,7 @@ namespace Tech.Aerove.Blazor.DataTables.Configs
         /// <summary>
         /// Set the property specific columns
         /// </summary>
-        public ColumnBuilder Column<TItem>(Expression<Func<TItem, object>> propertyExpression)
+        public ColumnBuilder Column<TItem>(Expression<Func<TItem, object?>> propertyExpression)
         {
             return new ColumnBuilder(this, propertyExpression.GetPropertyInfo().Name);
         }
