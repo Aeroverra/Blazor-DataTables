@@ -1,34 +1,27 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Tech.Aerove.Blazor.DataTables.AOriginalDT.Attributes;
-using Tech.Aerove.Blazor.DataTables.AOriginalDT.Models.Enums;
 
 namespace DataTable_Examples.Pages.Junk
 {
     public class JunkModel
     {
-
-        [DataFilterable(true)]
-        [DataOrderable(true)]
         public int Id { get; set; }
 
-        [DataFilterable(true)]
+
         public DateTime Date { get; set; }
 
-        [DataOrderable(true)]
+
         public Guid Guid { get; set; }
 
-        [DataOrderable(true)]
+
         public Guid Guid2 { get; set; }
 
-        [DataOrderable(true)]
+
         public Guid Guid3 { get; set; }
 
-        [DataOrderable(true)]
-        [DataSearch(SearchMode.Like)]
+
         public string Email { get; set; }
 
-        [DataOrderable(true)]
-        [DataSearch(SearchMode.Like)]
+
         public string Phone { get; set; }
 
         public JunkModel()

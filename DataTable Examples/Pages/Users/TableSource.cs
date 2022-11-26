@@ -1,12 +1,15 @@
 ﻿using DataTable_Examples.Data;
+using DataTable_Examples.Pages.Junk;
 using DataTable_Examples.Pages.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Tech.Aerove.Blazor.DataTables.AOriginalDT.Models.Abstracts;
+using Tech.Aerove.Blazor.DataTables.Configs;
+using Tech.Aerove.Blazor.DataTables.Context;
+using Tech.Aerove.Blazor.DataTables.Enums;
 
 namespace DataTable_Examples.Pages.Users
 {
-    public class TableSource : TableSource<TableUser>
+    public class TableSource : TableContext<IdentityUser>
     {
         private readonly IDbContextFactory<ApplicationDbContext> _databaseFactory;
         private ApplicationDbContext? Context { get; set; }
@@ -14,27 +17,16 @@ namespace DataTable_Examples.Pages.Users
         {
             _databaseFactory = databaseFactory;
         }
-        public override void Dispose()
+
+        protected override async Task<IQueryable<IdentityUser>> OnStartQueryAsync()
         {
-            if (Context != null)
-            {
-                Context.Dispose();
-            }
+            Context = await _databaseFactory.CreateDbContextAsync();
+            return Context.Users;
         }
-
-        public override async Task<List<TableUser>> FinishQueryAsync(IQueryable query)
+        protected override void OnConfiguring(InitialConfig config)
         {
-            var queryable = query as IQueryable<IdentityUser>;
-            var result = await queryable!.ToListAsync();
-            return result.Select(x => new TableUser(x)).ToList();
-        }
-
-        public override IQueryable GetQuery()
-        {
-            Context = _databaseFactory.CreateDbContext();
-            var query = Context.Users;
-
-            return query;
+            config.DefaultFilterable = true;
+            config.Column<IdentityUser>(x => x.Email).SearchMode(SearchMode.Like);
         }
     }
 }
