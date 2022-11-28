@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Tech.Aerove.Blazor.DataTables": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:2077;http://localhost:2078"
+    }
+  }
+}

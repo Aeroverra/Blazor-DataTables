@@ -16,7 +16,7 @@ namespace Tech.Aerove.Blazor.DataTables.Context
     /// The central data processing location which handles the setup
     /// calls the overrides and manages the data
     /// </summary>
-    internal class Engine<TItem> : IEngine
+    internal class Engine<TItem> : IEngine, IDisposable
     {
         private readonly TableContext<TItem> Context;
         private UIConfig UIConfig => Context.UIConfig;
@@ -148,5 +148,9 @@ namespace Tech.Aerove.Blazor.DataTables.Context
         }
 
 
+        public void Dispose()
+        {
+            QueryLock.Dispose();
+        }
     }
 }

@@ -18,10 +18,18 @@ namespace Tech.Aerove.Blazor.DataTables.Api
         }
 
         /// <summary>
-        /// Tell listeners we have fresh data. The datatable component uses
+        /// Tells listeners we have fresh data. The datatable component uses
         /// this to call statehaschanged and update the ui
         /// </summary>
         public event Func<Task> OnAfterUpdate = null!;
+
+        /// <summary>
+        /// Tells listeners the datatable ui is updated. This is called by the datatable
+        /// during onafterupdateasync is invoked to let the listeners knows the component
+        /// has finished rendering possible new items. Usually in conjunction with javascript
+        /// calls to rerender small things like icons.
+        /// </summary>
+        public event Func<Task>? OnAfterUpdateRendered = null;
 
         /// <summary>
         /// length of records queried and displayed
@@ -311,6 +319,21 @@ namespace Tech.Aerove.Blazor.DataTables.Api
             {
                 RunningConfig.ColumnsOrdered.Add(column);
             }
+        }
+
+        /// <summary>
+        /// Called by the DataTable component to let us know we should invoke the 
+        /// OnAfterUpdateRendered event listener. This is invoked when datatatables
+        /// onafterupdateasync is invoked to let the listeners knows the component
+        /// has finished rendering possible new items. 
+        /// </summary>
+        internal Task AfterUpdateRenderedAsync()
+        {
+            if (OnAfterUpdateRendered != null)
+            {
+                return OnAfterUpdateRendered();
+            }
+            return Task.CompletedTask;
         }
     }
 }

@@ -44,6 +44,12 @@ namespace Tech.Aerove.Blazor.DataTables.Components
             await InvokeAsync(() => StateHasChanged());
         }
 
+        protected override Task OnAfterRenderAsync(bool firstRender)
+        {
+            //Let listeners know our ui has rerendered with possible changes
+            return TableContext.Api.AfterUpdateRenderedAsync();
+        }
+
         //todo: investigate if the first update should be run in onafterrender or oninitialized
         //init causes slow page responsiveness if slow but onafter render causes an awful flash if fast
         //maybe a loader displayed on long page load would fix this in onafter

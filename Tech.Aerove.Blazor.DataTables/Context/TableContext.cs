@@ -9,7 +9,7 @@ using Tech.Aerove.Blazor.DataTables.Configs;
 
 namespace Tech.Aerove.Blazor.DataTables.Context
 {
-    public abstract class TableContext<TItem> : ITableContext
+    public abstract class TableContext<TItem> : ITableContext, IDisposable
     {
         /// <summary>
         /// The central data processing location which handles the setup
@@ -95,5 +95,34 @@ namespace Tech.Aerove.Blazor.DataTables.Context
         /// </summary>
         internal void Configuring(InitialConfig config) => OnConfiguring(config);
 
+
+        #region Dispose Pattern
+
+        // To detect redundant calls
+        private bool DisposedValue;
+
+        ~TableContext() => Dispose(false);
+
+        // Public implementation of Dispose pattern callable by consumers.
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        // Protected implementation of Dispose pattern.
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!DisposedValue)
+            {
+                if (disposing)
+                {
+                    Engine.Dispose();
+                }
+                DisposedValue = true;
+            }
+        }
+
+        #endregion
     }
 }
