@@ -1,17 +1,31 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Tech.Aerove.Blazor.DataTables.Api;
+using Tech.Aerove.Blazor.DataTables.Configs;
+using Tech.Aerove.Blazor.DataTables.Context;
+using Tech.Aerove.Blazor.DataTables.Enums;
+using Tech.Aerove.Blazor.DataTables.Extensions;
 using Tech.Aerove.Blazor.DataTables.Models;
 
 namespace Tech.Aerove.Blazor.DataTables.Components
 {
-    public partial class Header : IDisposable
+    /// <summary>
+    /// Used by the user to define a table header
+    /// </summary>
+    public partial class Header : ComponentBase
     {
-        [CascadingParameter]
-        private ColumnInfoModel Model { get; set; } = null!;
-
+        [CascadingParameter] internal ITableContext Context { get; set; } = null!;
+        private UIConfig UIConfig => Context.UIConfig;
+        private RunningConfig RunningConfig => Context.RunningConfig;
+        private IEngine Engine => Context.Engine;
+        private TableController Api => Context.TableController;
 
         [Parameter(CaptureUnmatchedValues = true)]
-        public Dictionary<string, object>? InputAttributes { get; set; }
+        public Dictionary<string, object> InputAttributes { get; set; } = new Dictionary<string, object>();
 
         [Parameter]
         public string? Name { get; set; } //User Passed Name to specify which header this should be
@@ -19,82 +33,27 @@ namespace Tech.Aerove.Blazor.DataTables.Components
         [Parameter]
         public RenderFragment? ChildContent { get; set; }//inner content created by user
 
-        private bool Render = false;
-        private OrderableDirection Direction = OrderableDirection.None;
+        private ColumnModel? ColumnModel;
 
         protected override void OnParametersSet()
         {
-            if (Model.Orderable)
+            if (ColumnModel == null && Name != null)
             {
-                var attributeClass = InputAttributes?.SingleOrDefault(x => x.Key == "class");
-                if (attributeClass == null) { return; }
-                if ($"{attributeClass.Value.Value}".Contains("orderable")) { return; }
-                InputAttributes?.Remove(attributeClass.Value.Key);
-                InputAttributes?.Add(attributeClass.Value.Key, $"{attributeClass.Value.Value} orderable");
-                SetOrderClass(Direction.GetClass());
+                ColumnModel = Api.GetColumn(Name);
             }
-        }
-
-        protected override void OnInitialized()
-        {
-            if (Name == Model.Name || Name == null)
+            if (ColumnModel != null && ColumnModel.OrderableDirection != OrderableDirection.Disabled)
             {
-                Render = true;
-                Model.TableData.OnOrderReset += OnOrderReset;
+                InputAttributes.RemoveStyleClass(OrderableDirection.Ascending.GetClass());
+                InputAttributes.RemoveStyleClass(OrderableDirection.Ascending.GetClass());
+                InputAttributes.AddStyleClass("orderable");
+                InputAttributes.AddStyleClass(ColumnModel.OrderableDirection.GetClass());
             }
-            base.OnInitialized();
-        }
 
-        public void OnOrderReset(object? sender, EventArgs args)
-        {
-            Direction = OrderableDirection.None;
-            SetOrderClass(Direction.GetClass());
         }
-
         private async Task ChangeDirectionAsync(MouseEventArgs args)
         {
-            var currentDirection = Direction;
-
-            if (args.ShiftKey == false)
-            {
-                Model.TableData.ResetOrder();
-            }
-
-
-            switch (currentDirection)
-            {
-                case OrderableDirection.None: Direction = OrderableDirection.Ascending; break;
-                case OrderableDirection.Ascending: Direction = OrderableDirection.Descending; break;
-                case OrderableDirection.Descending: Direction = OrderableDirection.None; break;
-            }
-            SetOrderClass(Direction.GetClass());
-
-            if (Direction != OrderableDirection.None)
-            {
-                if (Model.TableData.OrderableCommands.Any(x => x.PropertyName == Model.Name))
-                {
-                    Model.TableData.OrderableCommands.RemoveAll(x => x.PropertyName == Model.Name);
-                }
-                Model.TableData.OrderableCommands.Add(new OrderCommand(Model.Name, Direction));
-            }
-
-            await Model.TableData?.UpdateAsync();
-        }
-        private void SetOrderClass(string orderClass)
-        {
-            var attributeClass = InputAttributes?.SingleOrDefault(x => x.Key == "class");
-            if (attributeClass == null) { return; }
-            InputAttributes?.Remove(attributeClass.Value.Key);
-            var value = $"{attributeClass.Value.Value}";
-            value = value.Replace("asc", "").Replace("desc", "");
-            InputAttributes?.Add(attributeClass.Value.Key, $"{value} {orderClass}");
-        }
-        public void Dispose()
-        {
-            if (Render)
-            {
-                Model.TableData.OnOrderReset -= OnOrderReset;
-            }
+            Api.SwapOrder(ColumnModel!, args.ShiftKey);
+            await Api.UpdateAsync();
         }
     }
 }

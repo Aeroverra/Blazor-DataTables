@@ -1,4 +1,3 @@
-﻿@if (Name == ColumnName || Name == null)
-{
-    <td @attributes="InputAttributes">@ChildContent</td>
-}
+﻿@inherits ComponentBase
+
+<td @attributes="InputAttributes">@ChildContent</td>

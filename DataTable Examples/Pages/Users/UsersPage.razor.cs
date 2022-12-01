@@ -9,7 +9,7 @@ namespace DataTable_Examples.Pages.Users
         [Inject]
         private IDbContextFactory<ApplicationDbContext> _databaseFactory { get; set; } = null!;
 
-        private TableSource? Source;
+        private TableSource Source = null!;
         protected override Task OnInitializedAsync()
         {
             Source = new TableSource(_databaseFactory);

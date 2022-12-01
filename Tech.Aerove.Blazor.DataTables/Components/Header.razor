@@ -1,16 +1,29 @@
-﻿@if (Render)
-{
-    if (Model.Orderable)
-    {
-        <th scope="col" class="orderable @Direction.GetClass()" @attributes="InputAttributes" @onclick="ChangeDirectionAsync">
-            @ChildContent
-        </th>
-    }
-    else
-    {
-        <th scope="col" @attributes="InputAttributes">
-            @ChildContent
-        </th>
-    }
+﻿@using Tech.Aerove.Blazor.DataTables.Enums
+@inherits ComponentBase
 
+@if (ColumnModel != null && ColumnModel.OrderableDirection != OrderableDirection.Disabled)
+{
+    <th scope="col"  @attributes="InputAttributes" @onclick="ChangeDirectionAsync">
+        @if (ChildContent is not null)
+        {
+            @ChildContent
+        }
+        else
+        {
+            @Name
+        }
+    </th>
+}
+else
+{
+    <th scope="col" @attributes="InputAttributes">
+        @if (ChildContent is not null)
+        {
+            @ChildContent
+        }
+        else
+        {
+            @Name
+        }
+    </th>
 }

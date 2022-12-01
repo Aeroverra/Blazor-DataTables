@@ -1,0 +1,63 @@
+﻿@page "/Users/NewJunk"
+@using Tech.Aerove.Blazor.DataTables.Components
+@inherits ComponentBase
+
+
+<h3>UsersPage</h3>
+
+<div class="row">
+    <div class="col-3 offset-6">
+        <select title="Portfolio"
+                class="form-select"
+                name="@nameof(JunkModel.Id)"
+                @onchange="e=>Source.Api.HandleFilterChangeAsync(nameof(JunkModel.Id),e)"
+                multiple>
+
+            <option value="">Id</option>
+            @for (var x = 0; x < 6; x++)
+            {
+                <option value="@x">@x</option>
+            }
+        </select>
+    </div>
+    <div class="col-3">
+
+        <select title="Date"
+                class="form-select"
+                @onchange="e=>Source.Api.HandleFilterChangeAsync(nameof(JunkModel.Date),e)">
+
+            <option value="">Date</option>
+            @for (var x = 0; x < 6; x++)
+            {
+                <option value="@DateTime.Now.AddDays(x)">@DateTime.Now.AddDays(x).ToShortDateString()</option>
+            }
+        </select>
+    </div>
+    <div class="col-12">
+        <DataTable TableContext="Source" Context="Data" class="table table-responsive table-sm">
+
+            <TableHead>
+                <Header Name="@nameof(JunkModel.Id)" class="table-active"></Header>
+                <Header Name="@nameof(JunkModel.Date)" class="table-active"></Header>
+                <Header Name="@nameof(JunkModel.Guid)" class="table-active"></Header>
+                <Header Name="@nameof(JunkModel.Guid2)" class="table-active"></Header>
+                <Header Name="@nameof(JunkModel.Guid3)" class="table-active"></Header>
+                <Header Name="@nameof(JunkModel.Email)" class="table-active"></Header>
+                <Header Name="@nameof(JunkModel.Phone)" class="table-active"></Header>
+            </TableHead>
+
+            <TableBody>
+                <Column scope="row" class=""> @Data.Item.Id</Column>
+                <Column class="">@Data.Item.Date</Column>
+                <Column class="">@Data.Item.Guid</Column>
+                <Column class="">@Data.Item.Guid2</Column>
+                <Column class="">@Data.Item.Guid3</Column>
+                <Column class="">@Data.Item.Email</Column>
+                <Column class="">@Data.Item.Phone</Column>
+            </TableBody>
+        </DataTable>
+    </div>
+</div>
+<br />
+<br />
+<br />

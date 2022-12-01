@@ -1,7 +1,14 @@
-﻿namespace Tech.Aerove.Blazor.DataTables.Models
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Tech.Aerove.Blazor.DataTables.Enums
 {
-    internal enum OrderableDirection
+    public enum OrderableDirection
     {
+        Disabled,
         None,
         Ascending,
         Descending
@@ -12,11 +19,12 @@
         {
             switch (direction)
             {
+                case OrderableDirection.Disabled: return "disabled";
                 case OrderableDirection.None: return "";
                 case OrderableDirection.Ascending: return "asc";
                 case OrderableDirection.Descending: return "desc";
             }
-            return "";
+            throw new NotImplementedException("Unknown direction provided. ");
         }
     }
 }

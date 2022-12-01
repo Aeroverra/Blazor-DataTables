@@ -1,0 +1,28 @@
+﻿@using Tech.Aerove.Blazor.DataTables.Extensions
+@using Tech.Aerove.Blazor.DataTables.Models
+@typeparam TItem
+@inherits ComponentBase
+<div class="@(InputAttributes.HasStyleClass("table-responsive")?"table-responsive":"")">
+    <table @attributes="InputAttributes">
+        <thead>
+            <tr>
+                @if (TableHead is not null)
+                {
+                    @TableHead
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Engine.Items)
+            {
+                if (TableBody is not null)
+                {
+                    var param = new TableBodyTemplateModel<TItem>(Engine.Items, item);
+                    <tr>
+                        @TableBody(param)
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
