@@ -125,6 +125,7 @@ namespace Tech.Aerove.Blazor.DataTables.Api
             {
                 if (string.IsNullOrEmpty($"{value}"))
                 {
+                    SetFilters(name, new string[0]);
                     return UpdateAsync();
                 }
                 SetFilter(name, $"{value}");
