@@ -58,8 +58,16 @@ namespace Tech.Aerove.Blazor.DataTables.Context
                 //total records after being filtered
                 RunningConfig.RecordsFiltered = await query.CountAsync();
 
-                //sets order
-                query = query.Order(RunningConfig.ColumnsOrdered);
+                if(RunningConfig.ColumnsOrdered.Count > 0)
+                {
+                    //sets order
+                    query = query.Order(RunningConfig.ColumnsOrdered);
+                }
+                else
+                {
+                    //allow user to use more advanced ordering
+                    query = await Context.OrderQueryAsync(query);
+                }
 
                 //skip records based on the current page
                 query = query.Skip((RunningConfig.Page - 1) * RunningConfig.Length);
@@ -146,7 +154,6 @@ namespace Tech.Aerove.Blazor.DataTables.Context
             }
 
         }
-
 
         public void Dispose()
         {

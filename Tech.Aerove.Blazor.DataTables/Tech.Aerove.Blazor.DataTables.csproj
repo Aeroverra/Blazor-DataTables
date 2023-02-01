@@ -8,10 +8,10 @@
 		<Title>Blazor DataTables</Title>
 		<Authors>Aeroverra</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<AssemblyVersion>2.0.1</AssemblyVersion>
-		<FileVersion>2.0.1</FileVersion>
-		<Version>2.0.1</Version>
-		<VersionPrefix>2.0.1</VersionPrefix>
+		<AssemblyVersion>2.0.2</AssemblyVersion>
+		<FileVersion>2.0.2</FileVersion>
+		<Version>2.0.2</Version>
+		<VersionPrefix>2.0.2</VersionPrefix>
 		<VersionSuffix>alpha</VersionSuffix>
 	</PropertyGroup>
 

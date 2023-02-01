@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tech.Aerove.Blazor.DataTables.Api;
 using Tech.Aerove.Blazor.DataTables.Configs;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Tech.Aerove.Blazor.DataTables.Context
 {
@@ -61,6 +62,16 @@ namespace Tech.Aerove.Blazor.DataTables.Context
         /// <returns></returns>
         protected abstract Task<IQueryable<TItem>> OnStartQueryAsync();
 
+
+        /// <summary>
+        /// An optional way to apply more advanced filters
+        /// </summary>
+        /// <returns></returns>
+        protected virtual Task<IQueryable<TItem>> OnOrderQueryAsync(IQueryable<TItem> query)
+        {
+            return Task.FromResult(query);
+        }
+
         /// <summary>
         /// An optional way to modify or reinforce constraints before the query is evaluated
         /// </summary>
@@ -79,6 +90,11 @@ namespace Tech.Aerove.Blazor.DataTables.Context
         /// used internally to invoke the protected version
         /// </summary>
         internal Task<IQueryable<TItem>> StartQueryAsync() => OnStartQueryAsync();
+
+        /// <summary>
+        /// used internally to invoke the protected version
+        /// </summary>
+        internal Task<IQueryable<TItem>> OrderQueryAsync(IQueryable<TItem> query) => OnOrderQueryAsync(query);
 
         /// <summary>
         /// used internally to invoke the protected version
