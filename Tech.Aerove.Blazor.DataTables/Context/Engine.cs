@@ -109,6 +109,9 @@ namespace Tech.Aerove.Blazor.DataTables.Context
             //Sets the default values based on the users prefrences
             UIConfig.Setup(initialConfig);
 
+            //set the default legnth
+            RunningConfig.Length = initialConfig.Length;
+
             //set the max length constraint
             RunningConfig.MaxLength = initialConfig.MaxLength;
 
