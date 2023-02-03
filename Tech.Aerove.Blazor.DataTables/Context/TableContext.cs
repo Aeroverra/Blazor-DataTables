@@ -62,9 +62,17 @@ namespace Tech.Aerove.Blazor.DataTables.Context
         /// <returns></returns>
         protected abstract Task<IQueryable<TItem>> OnStartQueryAsync();
 
-
         /// <summary>
         /// An optional way to apply more advanced filters
+        /// </summary>
+        /// <returns></returns>
+        protected virtual Task<IQueryable<TItem>> OnFilterQueryAsync(IQueryable<TItem> query)
+        {
+            return Task.FromResult(query);
+        }
+
+        /// <summary>
+        /// An optional way to apply more advanced ordering
         /// </summary>
         /// <returns></returns>
         protected virtual Task<IQueryable<TItem>> OnOrderQueryAsync(IQueryable<TItem> query)
@@ -90,6 +98,11 @@ namespace Tech.Aerove.Blazor.DataTables.Context
         /// used internally to invoke the protected version
         /// </summary>
         internal Task<IQueryable<TItem>> StartQueryAsync() => OnStartQueryAsync();
+
+        /// <summary>
+        /// used internally to invoke the protected version
+        /// </summary>
+        internal Task<IQueryable<TItem>> FilterQueryAsync(IQueryable<TItem> query) => OnFilterQueryAsync(query);
 
         /// <summary>
         /// used internally to invoke the protected version

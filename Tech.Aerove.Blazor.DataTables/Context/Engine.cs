@@ -55,6 +55,9 @@ namespace Tech.Aerove.Blazor.DataTables.Context
                 //applies filters
                 query = query.Filter(RunningConfig.Columns);
 
+                //allows user to use more advanced filtering
+                query = await Context.FilterQueryAsync(query);
+
                 //total records after being filtered
                 RunningConfig.RecordsFiltered = await query.CountAsync();
 
