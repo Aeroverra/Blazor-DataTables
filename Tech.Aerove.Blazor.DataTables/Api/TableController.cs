@@ -64,22 +64,11 @@ namespace Tech.Aerove.Blazor.DataTables.Api
         /// </summary>
         /// <typeparam name="T">Should be the same as the context</typeparam>
         /// <returns></returns>
-        public IReadOnlyList<T> GetRecords<T>() => (Engine as Engine<T>)!.Items.ToList();
+        public List<T> GetRecords<T>() => (Engine as Engine<T>)!.Items.ToList();
 
-        /// <summary>
-        /// This is a temporary solution to a generic flow issue
-        /// </summary>
-        /// <typeparam name="T">Should be the same as the context</typeparam>
-        /// <param name="item"></param>
-        /// <returns>The result of <seealso cref="GetRecords"/> after the record has been removed</returns>
-        public async Task<IReadOnlyList<T>> RemoveRecord<T>(T item)
-        {
-            (Engine as Engine<T>)!.Items.Remove(item);
-            await UpdateAsync(true);
-            return GetRecords<T>();
-        }
 
         public int RecordsFiltered => RunningConfig.RecordsFiltered;
+
         public int RecordsTotal => RunningConfig.RecordsTotal;
 
         /// <summary>
