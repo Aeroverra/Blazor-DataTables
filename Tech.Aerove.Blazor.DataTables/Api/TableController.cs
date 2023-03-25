@@ -64,7 +64,7 @@ namespace Tech.Aerove.Blazor.DataTables.Api
         /// </summary>
         /// <typeparam name="T">Should be the same as the context</typeparam>
         /// <returns></returns>
-        public List<T> GetRecords<T>() => (Engine as Engine<T>)!.Items.ToList();
+        public List<T> GetRecords<T>() => (Engine as Engine<T>)!.Items;
 
 
         public int RecordsFiltered => RunningConfig.RecordsFiltered;
@@ -346,5 +346,54 @@ namespace Tech.Aerove.Blazor.DataTables.Api
             }
             return Task.CompletedTask;
         }
+
+        /// <summary>
+        /// Applies filters in the same way the table queries allowing you to use them with other small data sets and views
+        /// </summary>
+        /// <typeparam name="T">The same type the context is passed</typeparam>
+        /// <param name="query">An IQueryable the filters will be applied to</param>
+        /// <returns>Filtered IQueryable</returns>
+        /// <exception cref="Exception">Wrong type</exception>
+        public async Task<IQueryable<T>> ApplyFilters<T>(IQueryable<T> query)
+        {
+            var context = (Context as TableContext<T>) ?? throw new Exception("Context was null. Are you using the wrong type?");
+
+            //applies search text
+            query = query.Search(RunningConfig.Columns, RunningConfig.SearchText);
+
+            //applies filters
+            query = query.Filter(RunningConfig.Columns);
+
+            //allows user to use more advanced filtering
+            query = await context.FilterQueryAsync(query);
+
+            return query;
+        }
+
+        /// <summary>
+        /// Applies ordering in the same way the table queries allowing you to use it with other small data sets and views
+        /// </summary>
+        /// <typeparam name="T">The same type the context is passed</typeparam>
+        /// <param name="query">An IQueryable the filters will be applied to</param>
+        /// <returns>Filtered IQueryable</returns>
+        /// <exception cref="Exception">Wrong type</exception>
+        public async Task<IQueryable<T>> ApplyOrder<T>(IQueryable<T> query)
+        {
+            var context = (Context as TableContext<T>) ?? throw new Exception("Context was null. Are you using the wrong type?");
+
+            if (RunningConfig.ColumnsOrdered.Count > 0)
+            {
+                //sets order
+                query = query.Order(RunningConfig.ColumnsOrdered);
+            }
+            else
+            {
+                //allow user to use more advanced ordering
+                query = await context.OrderQueryAsync(query);
+            }
+
+            return query;
+        }
+
     }
 }
